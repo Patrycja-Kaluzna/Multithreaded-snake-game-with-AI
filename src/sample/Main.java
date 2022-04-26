@@ -19,6 +19,21 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +59,13 @@ public class Main extends Application {
     private List<Point> snakeBody = new ArrayList();
     private Point snakeHead;
     private Image foodImage;
+    //private Image SnakeHeadImage;
     private int foodX;
     private int foodY;
     private boolean gameOver;
     private int currentDirection;
     private int score = 0;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -61,6 +78,7 @@ public class Main extends Application {
         primaryStage.show();
         gc = canvas.getGraphicsContext2D();
 
+        // Obsluga kalwiatury
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -84,11 +102,14 @@ public class Main extends Application {
                 }
             }
         });
-
+        //Dodawanie elementow do weza, wszystkie elementy ustwione sa na jednej pozycji,
+        // lacznie z glowa
         for (int i = 0; i < 3; i++) {
-            snakeBody.add(new Point(5, ROWS / 2));
+            snakeBody.add(new Point(ROWS/2, ROWS/2));
         }
+
         snakeHead = snakeBody.get(0);
+
         generateFood();
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
@@ -105,7 +126,7 @@ public class Main extends Application {
         }
         drawBackground(gc);
         drawFood(gc);
-        drawSnake(gc);
+        drawSnake(gc,currentDirection);
         drawScore();
 
         for (int i = snakeBody.size() - 1; i >= 1; i--) {
@@ -115,15 +136,19 @@ public class Main extends Application {
 
         switch (currentDirection) {
             case RIGHT:
+
                 moveRight();
                 break;
             case LEFT:
+
                 moveLeft();
                 break;
             case UP:
                 moveUp();
+
                 break;
             case DOWN:
+
                 moveDown();
                 break;
         }
@@ -152,7 +177,7 @@ public class Main extends Application {
             foodY = (int) (Math.random() * COLUMNS);
 
             for (Point snake : snakeBody) {
-                if (snake.getX() == foodX && snake.getY() == foodY) {
+                if ((snake.getX() == foodX && snake.getY() == foodY )) {
                     continue start;
                 }
             }
@@ -165,13 +190,30 @@ public class Main extends Application {
         gc.drawImage(foodImage, foodX * SQUARE_SIZE, foodY * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
     }
 
-    private void drawSnake(GraphicsContext gc) {
-        gc.setFill(Color.web("4674E9"));
-        gc.fillRoundRect(snakeHead.getX() * SQUARE_SIZE, snakeHead.getY() * SQUARE_SIZE, SQUARE_SIZE - 1, SQUARE_SIZE - 1, 35, 35);
+    private void drawSnake(GraphicsContext gc,int currentDirection) {
 
+        Image SnakeHeadImage=new Image("/img/Snake_Head.png");
+        gc.save();
+        gc.translate((snakeHead.getX() * SQUARE_SIZE)+SQUARE_SIZE/2, (snakeHead.getY() * SQUARE_SIZE)+SQUARE_SIZE/2);
+        switch (currentDirection) {
+            case RIGHT:
+                gc.rotate(-90);
+                break;
+            case LEFT:
+                gc.rotate(-270);
+                break;
+            case UP:
+                gc.rotate(-180);
+                break;
+        }
+        gc.translate(-1*((snakeHead.getX() * SQUARE_SIZE)+SQUARE_SIZE/2), -1*((snakeHead.getY() * SQUARE_SIZE)+SQUARE_SIZE/2));
+        gc.drawImage(SnakeHeadImage, snakeHead.getX() * SQUARE_SIZE, snakeHead.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        gc.restore();
+
+        gc.setFill(Color.web("00b0ff")); //4674E9
         for (int i = 1; i < snakeBody.size(); i++) {
-            gc.fillRoundRect(snakeBody.get(i).getX() * SQUARE_SIZE, snakeBody.get(i).getY() * SQUARE_SIZE, SQUARE_SIZE - 1,
-                    SQUARE_SIZE - 1, 20, 20);
+            gc.fillRoundRect((snakeBody.get(i).getX() * SQUARE_SIZE)+3, (snakeBody.get(i).getY() * SQUARE_SIZE)+3, SQUARE_SIZE - 7,
+                    SQUARE_SIZE - 7, 40, 40);
         }
     }
 
@@ -218,6 +260,7 @@ public class Main extends Application {
         gc.setFont(new Font("Digital-7", 35));
         gc.fillText("Score: " + score, 10, 35);
     }
+
 
     public static void main(String[] args) {
         launch(args);
