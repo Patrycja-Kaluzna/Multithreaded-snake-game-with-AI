@@ -1,4 +1,4 @@
-package sample;
+package application;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,6 +16,8 @@ public class Snake {
 
     public String Head=null;
     public String Color=null;
+
+    public boolean gameOver= false;
 
     Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color) {
         for (int i = 0; i < LenghtOfSnake; i++) {

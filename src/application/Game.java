@@ -1,15 +1,10 @@
-package sample;
+package application;
 
-import java.awt.event.ActionEvent;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,22 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 //test test test test
@@ -63,9 +43,9 @@ public class Game {
    // private Point snakeHead;
     private Image foodImage;
     //private Image SnakeHeadImage;
+
     private int foodX;
     private int foodY;
-    private boolean gameOver;
     private int PlayerDirection;
     private int score = 0;
     private List<Snake> Snakes = new ArrayList();
@@ -123,7 +103,7 @@ public class Game {
 
 
     private void run(GraphicsContext gc) {
-        if (gameOver) {
+        if (Snakes.get(0).gameOver) {
             gc.setFill(Color.RED);
             gc.setFont(new Font("Digital-7", 70));
             gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
@@ -132,6 +112,7 @@ public class Game {
         drawBackground(gc);
         drawFood(gc);
 
+        /// Snake number 0 is player snake
         Snakes.get(0).Direction = PlayerDirection;
 
         for(int i=0;i<Snakes.size();i++) {
@@ -208,16 +189,30 @@ public class Game {
 
 
     public void gameOver() {
+
+        //Snake is out of the bound
         for (int a=0;a<Snakes.size();a++) {
             if (Snakes.get(a).snakeHead.x < 0 || Snakes.get(a).snakeHead.y < 0 || Snakes.get(a).snakeHead.x * SQUARE_SIZE >= WIDTH || Snakes.get(a).snakeHead.y * SQUARE_SIZE >= HEIGHT) {
-                gameOver = true;
+                Snakes.get(a).gameOver = true;
             }
 
-            //destroy itself
+            //destroy itself o
             for (int i = 1; i < Snakes.get(a).snakeBody.size(); i++) {
                 if (Snakes.get(a).snakeHead.x == Snakes.get(a).snakeBody.get(i).getX() && Snakes.get(a).snakeHead.getY() == Snakes.get(a).snakeBody.get(i).getY()) {
-                    gameOver = true;
+                    Snakes.get(a).gameOver = true;
                     break;
+                }
+            }
+            //Kill by other snake
+            for (int b=0; b <Snakes.size();b++){
+                //It is not the same snake
+                if(a!=b){
+                    for (int c = 0; c < Snakes.get(b).snakeBody.size(); c++) {
+                        if (Snakes.get(a).snakeHead.x == Snakes.get(b).snakeBody.get(c).getX() && Snakes.get(a).snakeHead.getY() == Snakes.get(b).snakeBody.get(c).getY()) {
+                            Snakes.get(a).gameOver = true;
+                            break;
+                        }
+                    }
                 }
             }
         }

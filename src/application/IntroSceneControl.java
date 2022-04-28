@@ -1,4 +1,4 @@
-package sample;
+package application;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,8 +10,8 @@ public class IntroSceneControl {
     @FXML
     public static AnchorPane IntroSceneParent;
 
+    //Start button handler
     public void game_click(ActionEvent actionEvent) {
-
         Game game= new Game();
         double size= (double) (((Node)actionEvent.getSource()).getScene().getHeight());
         game.Game_Start((Stage)((Node)actionEvent.getSource()).getScene().getWindow(),size);
