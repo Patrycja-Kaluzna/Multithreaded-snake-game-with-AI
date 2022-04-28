@@ -13,6 +13,7 @@ public class IntroSceneControl {
     public void game_click(ActionEvent actionEvent) {
 
         Game game= new Game();
-        game.Game_Start((Stage)((Node)actionEvent.getSource()).getScene().getWindow());
+        double size= (double) (((Node)actionEvent.getSource()).getScene().getHeight());
+        game.Game_Start((Stage)((Node)actionEvent.getSource()).getScene().getWindow(),size);
     }
 }

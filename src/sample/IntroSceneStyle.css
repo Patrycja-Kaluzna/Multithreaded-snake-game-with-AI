@@ -1,3 +1,5 @@
 .root {
-    -fx-background-image: url("https://www.google.com/images/srpr/logo3w.png");
+    -fx-background-image: url("Background.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
 }

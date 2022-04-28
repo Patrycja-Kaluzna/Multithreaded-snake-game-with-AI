@@ -41,12 +41,14 @@ import java.util.ArrayList;
 import java.util.List;
 //test test test test
 
+
+
 public class Game {
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = WIDTH;
+    private static int WIDTH = 800;
+    private static int HEIGHT = WIDTH;
     private static final int ROWS = 20;
     private static final int COLUMNS = ROWS;
-    private static final int SQUARE_SIZE = WIDTH / ROWS;
+    private static  int SQUARE_SIZE = WIDTH / ROWS;
     private static final String[] FOODS_IMAGE = new String[]{"/img/ic_orange.png", "/img/ic_apple.png", "/img/ic_cherry.png",
             "/img/ic_berry.png", "/img/ic_coconut_.png", "/img/ic_peach.png", "/img/ic_watermelon.png", "/img/ic_orange.png",
             "/img/ic_pomegranate.png"};
@@ -57,20 +59,24 @@ public class Game {
     private static final int DOWN = 3;
 
     private GraphicsContext gc;
-    private List<Point> snakeBody = new ArrayList();
-    private Point snakeHead;
+   // private List<Point> snakeBody = new ArrayList();
+   // private Point snakeHead;
     private Image foodImage;
     //private Image SnakeHeadImage;
     private int foodX;
     private int foodY;
     private boolean gameOver;
-    private int currentDirection;
+    private int PlayerDirection;
     private int score = 0;
-    private Stage primaryStage;
+    private List<Snake> Snakes = new ArrayList();
 
 
-    public  void Game_Start(Stage primaryStage){
 
+    public  void Game_Start(Stage primaryStage,double size){
+        //Inicjalizacja Sceny
+        WIDTH=(int)size;
+        HEIGHT=WIDTH;
+        SQUARE_SIZE = WIDTH / ROWS;
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
@@ -78,38 +84,35 @@ public class Game {
         primaryStage.setScene(scene);
         primaryStage.show();
         gc = canvas.getGraphicsContext2D();
-
+        ////////////////////////////////////////////
         // Obsluga kalwiatury
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 KeyCode code = event.getCode();
                 if (code == KeyCode.RIGHT || code == KeyCode.D) {
-                    if (currentDirection != LEFT) {
-                        currentDirection = RIGHT;
+                    if (PlayerDirection != LEFT) {
+                        PlayerDirection = RIGHT;
                     }
                 } else if (code == KeyCode.LEFT || code == KeyCode.A) {
-                    if (currentDirection != RIGHT) {
-                        currentDirection = LEFT;
+                    if (PlayerDirection != RIGHT) {
+                        PlayerDirection = LEFT;
                     }
                 } else if (code == KeyCode.UP || code == KeyCode.W) {
-                    if (currentDirection != DOWN) {
-                        currentDirection = UP;
+                    if (PlayerDirection != DOWN) {
+                        PlayerDirection = UP;
                     }
                 } else if (code == KeyCode.DOWN || code == KeyCode.S) {
-                    if (currentDirection != UP) {
-                        currentDirection = DOWN;
+                    if (PlayerDirection != UP) {
+                        PlayerDirection = DOWN;
                     }
                 }
             }
         });
         //Dodawanie elementow do weza, wszystkie elementy ustwione sa na jednej pozycji,
         // lacznie z glowa
-        for (int i = 0; i < 3; i++) {
-            snakeBody.add(new Point(ROWS/2, ROWS/2));
-        }
 
-        snakeHead = snakeBody.get(0);
+        Snakes.add(new Snake(3,ROWS/2,ROWS/2,"/img/Snake_Head.png","00b0ff"));
 
         generateFood();
 
@@ -128,37 +131,18 @@ public class Game {
         }
         drawBackground(gc);
         drawFood(gc);
-        drawSnake(gc,currentDirection);
+
+        Snakes.get(0).Direction = PlayerDirection;
+
+        for(int i=0;i<Snakes.size();i++) {
+            drawSnake(gc, Snakes.get(i));
+            Snakes.get(i).MoveSnake();
+        }
         drawScore();
-
-        for (int i = snakeBody.size() - 1; i >= 1; i--) {
-            snakeBody.get(i).x = snakeBody.get(i - 1).x;
-            snakeBody.get(i).y = snakeBody.get(i - 1).y;
-        }
-
-        switch (currentDirection) {
-            case RIGHT:
-
-                moveRight();
-                break;
-            case LEFT:
-
-                moveLeft();
-                break;
-            case UP:
-                moveUp();
-
-                break;
-            case DOWN:
-
-                moveDown();
-                break;
-        }
-
         gameOver();
-        eatFood();
+        Scoring();
     }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void drawBackground(GraphicsContext gc) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
@@ -178,10 +162,12 @@ public class Game {
             foodX = (int) (Math.random() * ROWS);
             foodY = (int) (Math.random() * COLUMNS);
 
-            for (Point snake : snakeBody) {
-                if ((snake.getX() == foodX && snake.getY() == foodY )) {
+            for (int i=0; i<Snakes.size();i++){
+            for (int a=0; a<Snakes.get(i).snakeBody.size();a++) {
+                if ((Snakes.get(i).snakeBody.get(a).getX() == foodX && Snakes.get(i).snakeBody.get(a).getY() == foodY )) {
                     continue start;
                 }
+            }
             }
             foodImage = new Image(FOODS_IMAGE[(int) (Math.random() * FOODS_IMAGE.length)]);
             break;
@@ -192,12 +178,13 @@ public class Game {
         gc.drawImage(foodImage, foodX * SQUARE_SIZE, foodY * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
     }
 
-    private void drawSnake(GraphicsContext gc,int currentDirection) {
-
-        Image SnakeHeadImage=new Image("/img/Snake_Head.png");
+    private void drawSnake(GraphicsContext gc,Snake snake) {
+        System.out.println(snake.snakeHead.getX());
+        System.out.println(snake.snakeHead.getY());
+        Image SnakeHeadImage=new Image(snake.Head);
         gc.save();
-        gc.translate((snakeHead.getX() * SQUARE_SIZE)+SQUARE_SIZE/2, (snakeHead.getY() * SQUARE_SIZE)+SQUARE_SIZE/2);
-        switch (currentDirection) {
+        gc.translate((snake.snakeHead.getX() * SQUARE_SIZE)+SQUARE_SIZE/2, (snake.snakeHead.getY() * SQUARE_SIZE)+SQUARE_SIZE/2);
+        switch (snake.Direction) {
             case RIGHT:
                 gc.rotate(-90);
                 break;
@@ -208,59 +195,48 @@ public class Game {
                 gc.rotate(-180);
                 break;
         }
-        gc.translate(-1*((snakeHead.getX() * SQUARE_SIZE)+SQUARE_SIZE/2), -1*((snakeHead.getY() * SQUARE_SIZE)+SQUARE_SIZE/2));
-        gc.drawImage(SnakeHeadImage, snakeHead.getX() * SQUARE_SIZE, snakeHead.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        gc.translate(-1*((snake.snakeHead.getX() * SQUARE_SIZE)+SQUARE_SIZE/2), -1*((snake.snakeHead.getY() * SQUARE_SIZE)+SQUARE_SIZE/2));
+        gc.drawImage(SnakeHeadImage, snake.snakeHead.getX() * SQUARE_SIZE, snake.snakeHead.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         gc.restore();
 
-        gc.setFill(Color.web("00b0ff")); //4674E9
-        for (int i = 1; i < snakeBody.size(); i++) {
-            gc.fillRoundRect((snakeBody.get(i).getX() * SQUARE_SIZE)+3, (snakeBody.get(i).getY() * SQUARE_SIZE)+3, SQUARE_SIZE - 7,
-                    SQUARE_SIZE - 7, 40, 40);
+        gc.setFill(Color.web(snake.Color)); //4674E9
+        for (int i = 1; i < snake.snakeBody.size(); i++) {
+            gc.fillRoundRect((snake.snakeBody.get(i).getX() * SQUARE_SIZE), (snake.snakeBody.get(i).getY() * SQUARE_SIZE), SQUARE_SIZE,
+                    SQUARE_SIZE , 100, 100);
         }
     }
 
-    private void moveRight() {
-        snakeHead.x++;
-    }
-
-    private void moveLeft() {
-        snakeHead.x--;
-    }
-
-    private void moveUp() {
-        snakeHead.y--;
-    }
-
-    private void moveDown() {
-        snakeHead.y++;
-    }
 
     public void gameOver() {
-        if (snakeHead.x < 0 || snakeHead.y < 0 || snakeHead.x * SQUARE_SIZE >= WIDTH || snakeHead.y * SQUARE_SIZE >= HEIGHT) {
-            gameOver = true;
-        }
-
-        //destroy itself
-        for (int i = 1; i < snakeBody.size(); i++) {
-            if (snakeHead.x == snakeBody.get(i).getX() && snakeHead.getY() == snakeBody.get(i).getY()) {
+        for (int a=0;a<Snakes.size();a++) {
+            if (Snakes.get(a).snakeHead.x < 0 || Snakes.get(a).snakeHead.y < 0 || Snakes.get(a).snakeHead.x * SQUARE_SIZE >= WIDTH || Snakes.get(a).snakeHead.y * SQUARE_SIZE >= HEIGHT) {
                 gameOver = true;
-                break;
+            }
+
+            //destroy itself
+            for (int i = 1; i < Snakes.get(a).snakeBody.size(); i++) {
+                if (Snakes.get(a).snakeHead.x == Snakes.get(a).snakeBody.get(i).getX() && Snakes.get(a).snakeHead.getY() == Snakes.get(a).snakeBody.get(i).getY()) {
+                    gameOver = true;
+                    break;
+                }
             }
         }
     }
 
-    private void eatFood() {
-        if (snakeHead.getX() == foodX && snakeHead.getY() == foodY) {
-            snakeBody.add(new Point(-1, -1));
-            generateFood();
-            score += 5;
+    private void Scoring() {
+        for (int i=0; i< Snakes.size();i++) {
+            if (Snakes.get(i).snakeHead.getX() == foodX && Snakes.get(i).snakeHead.getY() == foodY) {
+                Snakes.get(i).Eat();
+                generateFood();
+                Snakes.get(i).score += 5;
+            }
         }
     }
 
     private void drawScore() {
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("Digital-7", 35));
-        gc.fillText("Score: " + score, 10, 35);
+        gc.fillText("Score: " + Snakes.get(0).score, 10, 35);
     }
 
 
