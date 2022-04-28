@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 //test test test test
@@ -38,6 +39,7 @@ public class Game {
 
     private List<Snake> Snakes = new ArrayList();
     private List<Food> Foods = new ArrayList<>();
+    private List<Wall> Walls = new ArrayList<>();
 
 
     public void Game_Start(Stage primaryStage, double size) {
@@ -82,9 +84,12 @@ public class Game {
 
         Snakes.add(new Snake(3, ROWS / 2, ROWS / 2, "/img/Snake_Head.png", "00b0ff"));
 
-        //generateFood();
+
         Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
         Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
+        Point pom = new Point(2,2);
+        Walls.add(new Wall(pom));
+
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -101,6 +106,8 @@ public class Game {
         }
         drawBackground(gc);
         drawFood(gc);
+        drawWall(gc);
+
 
         /// Snake number 0 is player snake
         Snakes.get(0).Direction = PlayerDirection;
@@ -132,6 +139,15 @@ public class Game {
     private void drawFood(GraphicsContext gc) {
         for (int i = 0; i < Foods.size(); i++) {
             gc.drawImage(Foods.get(i).foodImage, Foods.get(i).coordinates.getX() * SQUARE_SIZE, Foods.get(i).coordinates.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        }
+    }
+
+    private void drawWall(GraphicsContext gc) {
+        System.out.println(Walls.size());
+        for (int i = 0; i < Walls.size(); i++) {
+            for (int a = 0; a < Walls.get(i).segments.size(); a++) {
+                gc.drawImage(new Image(Walls.get(i).Wall_Image), Walls.get(i).segments.get(a).getX() * SQUARE_SIZE, Walls.get(i).segments.get(a).getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+            }
         }
     }
 
@@ -197,7 +213,7 @@ public class Game {
     private void Scoring() {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
-                if (Snakes.get(i).snakeHead.getX() == Foods.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() ==  Foods.get(f).coordinates.getY()) {
+                if (Snakes.get(i).snakeHead.getX() == Foods.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).coordinates.getY()) {
                     Snakes.get(i).Eat();
                     Foods.remove(f);
                     Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
