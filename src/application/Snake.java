@@ -19,13 +19,14 @@ public class Snake {
 
     public boolean gameOver= false;
 
-    Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color) {
+    Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color, int direction) {
         for (int i = 0; i < LenghtOfSnake; i++) {
             snakeBody.add(new Point(StartXpos, StartYpos));
         }
         snakeHead = snakeBody.get(0);
         Head=head;
         Color=color;
+        Direction=direction;
     }
 
     public void MoveSnake() {

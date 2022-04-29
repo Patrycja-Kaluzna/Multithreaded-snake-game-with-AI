@@ -24,11 +24,11 @@ import java.util.List;
 
 
 public class Game {
-    private static int WIDTH = 800;
-    private static int HEIGHT = WIDTH;
-    private static final int ROWS = 20;
+    private static double WIDTH = 800;
+    private static double HEIGHT = WIDTH;
+    private static final int ROWS = 21;
     private static final int COLUMNS = ROWS;
-    private static int SQUARE_SIZE = WIDTH / ROWS;
+    private static double SQUARE_SIZE = WIDTH / ROWS;
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
     private static final int UP = 2;
@@ -79,17 +79,12 @@ public class Game {
                 }
             }
         });
-        //Dodawanie elementow do weza, wszystkie elementy ustwione sa na jednej pozycji,
-        // lacznie z glowa
 
-        Snakes.add(new Snake(3, ROWS / 2, ROWS / 2, "/img/Snake_Head.png", "00b0ff"));
-
-
+        Snakes.add(new Snake(3, ROWS / 2, ROWS / 4, "/img/Snake_Head.png", "00b0ff",RIGHT));
+        PlayerDirection=Snakes.get(0).Direction;
         Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
         Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
-        Point pom = new Point(2,2);
-        Walls.add(new Wall(pom));
-
+        Walls.add(new Wall(0,new Point((int)(Math.ceil(ROWS/4)),(int)(Math.ceil(ROWS/2))),new Point((int)(ROWS-Math.ceil(ROWS/4)),(int)(Math.ceil(ROWS/2)))));
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -99,15 +94,12 @@ public class Game {
 
     private void run(GraphicsContext gc) {
         if (Snakes.get(0).gameOver) {
-            gc.setFill(Color.RED);
-            gc.setFont(new Font("Digital-7", 70));
-            gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
+            drawGameOver(gc);
             return;
         }
         drawBackground(gc);
         drawFood(gc);
         drawWall(gc);
-
 
         /// Snake number 0 is player snake
         Snakes.get(0).Direction = PlayerDirection;
@@ -143,7 +135,6 @@ public class Game {
     }
 
     private void drawWall(GraphicsContext gc) {
-        System.out.println(Walls.size());
         for (int i = 0; i < Walls.size(); i++) {
             for (int a = 0; a < Walls.get(i).segments.size(); a++) {
                 gc.drawImage(new Image(Walls.get(i).Wall_Image), Walls.get(i).segments.get(a).getX() * SQUARE_SIZE, Walls.get(i).segments.get(a).getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
@@ -152,8 +143,6 @@ public class Game {
     }
 
     private void drawSnake(GraphicsContext gc, Snake snake) {
-        System.out.println(snake.snakeHead.getX());
-        System.out.println(snake.snakeHead.getY());
         Image SnakeHeadImage = new Image(snake.Head);
         gc.save();
         gc.translate((snake.snakeHead.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (snake.snakeHead.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
@@ -207,6 +196,15 @@ public class Game {
                     }
                 }
             }
+            //Smash Wall
+            for (int d = 0; d < Walls.size(); d++) {
+                for (int e = 0; e < Walls.get(d).segments.size(); e++) {
+                    if (Snakes.get(a).snakeHead.x == Walls.get(d).segments.get(e).getX() && Snakes.get(a).snakeHead.y ==Walls.get(d).segments.get(e).getY()) {
+                        Snakes.get(a).gameOver = true;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -227,6 +225,12 @@ public class Game {
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("Digital-7", 35));
         gc.fillText("Score: " + Snakes.get(0).score, 10, 35);
+    }
+
+    private void drawGameOver (GraphicsContext gc){
+        gc.setFill(Color.RED);
+        gc.setFont(new Font("Digital-7", 70));
+        gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
     }
 
 

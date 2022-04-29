@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 //test test test test
 
@@ -14,6 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Snake");
+        primaryStage.getIcons().add(new Image("img/icon.jpg"));
         Parent root = FXMLLoader.load(getClass().getResource("IntroScene.fxml"));
 
         Scene scene = new Scene(root);

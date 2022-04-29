@@ -19,19 +19,23 @@ public class Wall {
 
         //Horizontal
         Point Builder = Start;
-        if (TypeOfWall == 0 &&Start.getX()==End.getX()&&Start.getY()<=End.getY()) {
+
+        if (TypeOfWall == 0 &&Start.getX()<=End.getX()&&Start.getY()==End.getY()) {
             segments.clear();
-            while (Builder.getX() != End.getX()) {
-                segments.add(Builder);
-                Builder.x += 1;
+            while ( Builder.x != End.x) {
+                segments.add(new Point(Builder));
+                Builder.x+=1;
             }
         }
+
         //Vertical
         if (TypeOfWall == 1&&Start.getY()==End.getY()&&Start.getX()<=End.getX()) {
             segments.clear();
             while (Builder.getY() != End.getY()) {
-                segments.add(Builder);
+                segments.add(new Point((int)(Builder.getX()), (int)(Builder.getY())));
+
                 Builder.x += 1;
+
             }
         }
 
