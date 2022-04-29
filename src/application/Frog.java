@@ -5,19 +5,16 @@ import javafx.scene.image.Image;
 import java.awt.*;
 import java.util.List;
 
-public class Food {
-
-    private static final String[] FOODS_IMAGE = new String[]{"/img/ic_orange.png", "/img/ic_apple.png", "/img/ic_cherry.png",
-            "/img/ic_berry.png", "/img/ic_coconut_.png", "/img/ic_peach.png", "/img/ic_watermelon.png", "/img/ic_orange.png",
-            "/img/ic_pomegranate.png"};
-    public Image foodImage;
+public class Frog {
+    public int Direction = 2;
+    public Image frogImage = new Image("/img/frog.png");
     public Point coordinates= new Point(0,0);
 
-    Food(List <Snake> Snakes ,List<Food> Foods,List<Wall> Walls,int ROWS,int  COLUMNS){
-        generateFood( Snakes , Foods, Walls , ROWS,  COLUMNS);
+    Frog(List<Snake> Snakes, List<Food> Foods, List<Wall> Walls, List<Frog> Frogs,int ROWS,int  COLUMNS) {
+    GenerateFrog(Snakes , Foods, Walls ,Frogs,ROWS,COLUMNS);
     }
 
-    public void generateFood(List <Snake> Snakes ,List<Food> Foods,List<Wall> Walls,int ROWS,int  COLUMNS) {
+    public void GenerateFrog(List<Snake> Snakes, List<Food> Foods, List<Wall> Walls, List<Frog> Frogs,int ROWS,int  COLUMNS) {
         start:
         while (true) {
             coordinates.x = (int) (Math.random() * ROWS);
@@ -31,9 +28,9 @@ public class Food {
                 }
             }
             for (int i=0; i<Foods.size();i++){
-                    if ((Foods.get(i).coordinates.getX() == coordinates.x && Foods.get(i).coordinates.getY() == coordinates.y )) {
-                        continue start;
-                    }
+                if ((Foods.get(i).coordinates.getX() == coordinates.x && Foods.get(i).coordinates.getY() == coordinates.y )) {
+                    continue start;
+                }
             }
             for (int i=0; i<Walls.size();i++){
                 for (int a=0; a<Walls.get(i).segments.size();a++) {
@@ -42,9 +39,19 @@ public class Food {
                     }
                 }
             }
+            for (int i=0; i<Foods.size();i++){
+                if ((Foods.get(i).coordinates.getX() == coordinates.x && Foods.get(i).coordinates.getY() == coordinates.y )) {
+                    continue start;
+                }
+            }
+            for (int i=0; i<Frogs.size();i++){
+                if ((Frogs.get(i).coordinates.getX() == coordinates.x && Frogs.get(i).coordinates.getY() == coordinates.y )) {
+                    continue start;
+                }
+            }
 
-            foodImage = new Image(FOODS_IMAGE[(int) (Math.random() * FOODS_IMAGE.length)]);
             break;
         }
     }
+
 }

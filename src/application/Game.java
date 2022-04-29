@@ -39,6 +39,7 @@ public class Game {
 
     private List<Snake> Snakes = new ArrayList();
     private List<Food> Foods = new ArrayList<>();
+    private List<Frog> Frogs = new ArrayList<>();
     private List<Wall> Walls = new ArrayList<>();
 
 
@@ -80,12 +81,12 @@ public class Game {
             }
         });
 
-        Snakes.add(new Snake(3, ROWS / 2, ROWS / 4, "/img/Snake_Head.png", "00b0ff",RIGHT));
-        PlayerDirection=Snakes.get(0).Direction;
-        Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
-        Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
-        Walls.add(new Wall(0,new Point((int)(Math.ceil(ROWS/4)),(int)(Math.ceil(ROWS/2))),new Point((int)(ROWS-Math.ceil(ROWS/4)),(int)(Math.ceil(ROWS/2)))));
-
+        Snakes.add(new Snake(3, ROWS / 2, ROWS / 4, "/img/Snake_Head.png", "00b0ff", RIGHT));
+        PlayerDirection = Snakes.get(0).Direction;
+        Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2)))));
+        Foods.add(new Food(Snakes, Foods, Walls, ROWS, COLUMNS));
+        Foods.add(new Food(Snakes, Foods, Walls, ROWS, COLUMNS));
+        Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -100,7 +101,9 @@ public class Game {
         drawBackground(gc);
         drawFood(gc);
         drawWall(gc);
-
+        for (int i = 0; i < Frogs.size(); i++) {
+            drawFrog(gc,Frogs.get(i));
+        }
         /// Snake number 0 is player snake
         Snakes.get(0).Direction = PlayerDirection;
 
@@ -142,6 +145,27 @@ public class Game {
         }
     }
 
+    private void drawFrog(GraphicsContext gc, Frog frog) {
+        Image FrogImage = frog.frogImage;
+        gc.save();
+        gc.translate((frog.coordinates.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (frog.coordinates.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
+        switch (frog.Direction) {
+            case RIGHT:
+                gc.rotate(-90);
+                break;
+            case LEFT:
+                gc.rotate(-270);
+                break;
+            case UP:
+                gc.rotate(-180);
+                break;
+        }
+        gc.translate(-1 * ((frog.coordinates.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2), -1 * ((frog.coordinates.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2));
+        gc.drawImage(FrogImage, frog.coordinates.getX() * SQUARE_SIZE, frog.coordinates.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        gc.restore();
+    }
+
+
     private void drawSnake(GraphicsContext gc, Snake snake) {
         Image SnakeHeadImage = new Image(snake.Head);
         gc.save();
@@ -168,7 +192,17 @@ public class Game {
         }
     }
 
+    private void drawScore() {
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font("Digital-7", 35));
+        gc.fillText("Score: " + Snakes.get(0).score, 10, 35);
+    }
 
+    private void drawGameOver(GraphicsContext gc) {
+        gc.setFill(Color.RED);
+        gc.setFont(new Font("Digital-7", 70));
+        gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
+    }
     public void gameOver() {
 
         //Snake is out of the bound
@@ -199,7 +233,7 @@ public class Game {
             //Smash Wall
             for (int d = 0; d < Walls.size(); d++) {
                 for (int e = 0; e < Walls.get(d).segments.size(); e++) {
-                    if (Snakes.get(a).snakeHead.x == Walls.get(d).segments.get(e).getX() && Snakes.get(a).snakeHead.y ==Walls.get(d).segments.get(e).getY()) {
+                    if (Snakes.get(a).snakeHead.x == Walls.get(d).segments.get(e).getX() && Snakes.get(a).snakeHead.y == Walls.get(d).segments.get(e).getY()) {
                         Snakes.get(a).gameOver = true;
                         break;
                     }
@@ -214,23 +248,21 @@ public class Game {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).coordinates.getY()) {
                     Snakes.get(i).Eat();
                     Foods.remove(f);
-                    Foods.add(new Food(Snakes, Foods, ROWS, COLUMNS));
+                    Foods.add(new Food(Snakes, Foods, Walls, ROWS, COLUMNS));
                     Snakes.get(i).score += 5;
                 }
             }
+            for (int f = 0; f < Frogs.size(); f++) {
+                if (Snakes.get(i).snakeHead.getX() == Frogs.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() == Frogs.get(f).coordinates.getY()) {
+                    Snakes.get(i).Eat();
+                    Snakes.get(i).Eat();
+                    Frogs.remove(f);
+                    Frogs.add(new Frog(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
+                    Snakes.get(i).score += 10;
+                }
+            }
         }
-    }
 
-    private void drawScore() {
-        gc.setFill(Color.WHITE);
-        gc.setFont(new Font("Digital-7", 35));
-        gc.fillText("Score: " + Snakes.get(0).score, 10, 35);
-    }
-
-    private void drawGameOver (GraphicsContext gc){
-        gc.setFill(Color.RED);
-        gc.setFont(new Font("Digital-7", 70));
-        gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
     }
 
 
