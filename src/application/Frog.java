@@ -15,11 +15,11 @@ public class Frog {
     public Image frogImage = new Image("/img/frog.png");
     public Point coordinates = new Point(0, 0);
 
-    Frog(List<Snake> Snakes, List<Food> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
+    Frog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         GenerateFrog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS);
     }
 
-    public void GenerateFrog(List<Snake> Snakes, List<Food> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
+    public void GenerateFrog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         start:
         while (true) {
             coordinates.x = (int) (Math.random() * ROWS);
@@ -32,8 +32,8 @@ public class Frog {
                     }
                 }
             }
-            for (Food food : Foods) {
-                if ((food.coordinates.getX() == coordinates.x && food.coordinates.getY() == coordinates.y)) {
+            for (Fruit food : Foods) {
+                if ((food.Coordinates.getX() == coordinates.x && food.Coordinates.getY() == coordinates.y)) {
                     continue start;
                 }
             }

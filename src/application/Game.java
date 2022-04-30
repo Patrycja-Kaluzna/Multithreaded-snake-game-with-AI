@@ -38,7 +38,7 @@ public class Game {
     private int PlayerDirection;
 
     private List<Snake> Snakes = new ArrayList();
-    private List<Food> Foods = new ArrayList<>();
+    private List<Fruit> Foods = new ArrayList<>();
     private List<Frog> Frogs = new ArrayList<>();
     private List<Wall> Walls = new ArrayList<>();
     private List<Point> AllPoints = new ArrayList<>();
@@ -84,8 +84,8 @@ public class Game {
         Snakes.add(new Snake(3, ROWS / 2, ROWS / 4, "/img/Snake_Head.png", "00b0ff", RIGHT));
         PlayerDirection = Snakes.get(0).Direction;
         Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2)))));
-        Foods.add(new Food(Snakes, Foods, Walls, ROWS, COLUMNS));
-        Foods.add(new Food(Snakes, Foods, Walls, ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
         Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -135,7 +135,7 @@ public class Game {
 
     private void drawFood(GraphicsContext gc) {
         for (int i = 0; i < Foods.size(); i++) {
-            gc.drawImage(Foods.get(i).foodImage, Foods.get(i).coordinates.getX() * SQUARE_SIZE, Foods.get(i).coordinates.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+            gc.drawImage(Foods.get(i).fruitImage, Foods.get(i).Coordinates.getX() * SQUARE_SIZE, Foods.get(i).Coordinates.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         }
     }
 
@@ -248,10 +248,10 @@ public class Game {
     private void Scoring() {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
-                if (Snakes.get(i).snakeHead.getX() == Foods.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).coordinates.getY()) {
+                if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {
                     Snakes.get(i).Eat();
                     Foods.remove(f);
-                    Foods.add(new Food(Snakes, Foods, Walls, ROWS, COLUMNS));
+                    Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
                     Snakes.get(i).score += 5;
                 }
             }
@@ -270,8 +270,8 @@ public class Game {
 
     private void SumOfOTakenPoints() {
         AllPoints.clear();
-        for (Food food : Foods) {
-            AllPoints.add(food.coordinates);
+        for (Fruit food : Foods) {
+            AllPoints.add(food.Coordinates);
         }
         for (Frog forg : Frogs) {
             AllPoints.add(forg.coordinates);
@@ -287,8 +287,8 @@ public class Game {
 
     private void SumOfOTakenPoints(Frog WithOutThis) {
         AllPoints.clear();
-        for (Food food : Foods) {
-            AllPoints.add(food.coordinates);
+        for (Fruit food : Foods) {
+            AllPoints.add(food.Coordinates);
         }
         for (Frog frog : Frogs) {
             if (frog != WithOutThis) {

@@ -26,8 +26,8 @@ public class Fruit implements Food {
             Coordinates.y = (int) (Math.random() * COLUMNS);
 
             for (int i = 0; i < Snakes.size(); i++) {
-                for (int a = 0; a < Snakes.get(i).Body.size(); a++) {
-                    if (Snakes.get(i).Body.get(a).getX() == Coordinates.x && Snakes.get(i).Body.get(a).getY() == Coordinates.y) {
+                for (int a = 0; a < Snakes.get(i).snakeBody.size(); a++) {
+                    if (Snakes.get(i).snakeBody.get(a).getX() == Coordinates.x && Snakes.get(i).snakeBody.get(a).getY() == Coordinates.y) {
                         continue start;
                     }
                 }
