@@ -4,74 +4,73 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Snake {
+public class Snake implements Player {
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
     private static final int UP = 2;
     private static final int DOWN = 3;
-    public List<Point> snakeBody = new ArrayList();
-    public Point snakeHead = null;
-    public int Direction = 0;
-    public int score =0;
 
-    public String Head=null;
-    public String Color=null;
+    List<Point> Body = new ArrayList();
+    Point Head = null;
 
-    public boolean gameOver= false;
+    String headImage = null;
+    String imageColor = null;
 
-    Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color, int direction) {
-        for (int i = 0; i < LenghtOfSnake; i++) {
-            snakeBody.add(new Point(StartXpos, StartYpos));
+    int Direction = 0;
+
+    int Score = 0;
+    boolean isGameOver = false;
+
+    Snake(int snakeLength, int startXPos, int startYPos, String newHeadImage, String newHeadColor, int newDirection) {
+        for (int i = 0; i < snakeLength; i++) {
+            Body.add(new Point(startXPos, startYPos));
         }
-        snakeHead = snakeBody.get(0);
-        Head=head;
-        Color=color;
-        Direction=direction;
+        Head = Body.get(0);
+
+        headImage = newHeadImage;
+        imageColor = newHeadColor;
+
+        Direction = newDirection;
     }
 
-    public void MoveSnake() {
-        for (int i = snakeBody.size() - 1; i >= 1; i--) {
-            snakeBody.get(i).x = snakeBody.get(i - 1).x;
-            snakeBody.get(i).y = snakeBody.get(i - 1).y;
+    private void moveRight() {
+        Head.x++;
+    }
+
+    private void moveLeft() {
+        Head.x--;
+    }
+
+    private void moveUp() {
+        Head.y--;
+    }
+
+    private void moveDown() {
+        Head.y++;
+    }
+
+    public void Move() {
+        for (int i = Body.size() - 1; i >= 1; i--) {
+            Body.get(i).x = Body.get(i - 1).x;
+            Body.get(i).y = Body.get(i - 1).y;
         }
         switch (Direction) {
             case RIGHT:
-
                 moveRight();
                 break;
             case LEFT:
-
                 moveLeft();
                 break;
             case UP:
                 moveUp();
-
                 break;
             case DOWN:
-
                 moveDown();
                 break;
         }
     }
 
-    private void moveRight() {
-        snakeHead.x++;
+    public void Eat() {
+        Body.add(new Point(-1, -1));
     }
-
-    private void moveLeft() {
-        snakeHead.x--;
-    }
-
-    private void moveUp() {
-        snakeHead.y--;
-    }
-
-    private void moveDown() {
-        snakeHead.y++;
-    }
-    public void Eat(){
-        snakeBody.add(new Point(-1, -1));
-    }
-
-
 }
