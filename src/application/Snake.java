@@ -1,5 +1,7 @@
 package application;
 
+import com.sun.source.tree.DoWhileLoopTree;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,10 @@ public class Snake {
         Direction=direction;
     }
 
-    public void MoveSnake() {
+    public void MoveSnake(int chosenDirection) {
+        if(chosenDirection==RIGHT||chosenDirection==LEFT||chosenDirection==UP||chosenDirection==DOWN){
+            this.Direction=chosenDirection;
+        }
         for (int i = snakeBody.size() - 1; i >= 1; i--) {
             snakeBody.get(i).x = snakeBody.get(i - 1).x;
             snakeBody.get(i).y = snakeBody.get(i - 1).y;

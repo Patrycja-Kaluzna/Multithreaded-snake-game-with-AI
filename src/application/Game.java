@@ -41,7 +41,7 @@ public class Game {
     private List<Food> Foods = new ArrayList<>();
     private List<Frog> Frogs = new ArrayList<>();
     private List<Wall> Walls = new ArrayList<>();
-
+    private List<Point> AllPoints = new ArrayList<>();
 
     public void Game_Start(Stage primaryStage, double size) {
         //Inicjalizacja Sceny
@@ -102,15 +102,17 @@ public class Game {
         drawFood(gc);
         drawWall(gc);
         for (int i = 0; i < Frogs.size(); i++) {
-            drawFrog(gc,Frogs.get(i));
+            drawFrog(gc, Frogs.get(i));
+            SumOfOTakenPoints(Frogs.get(i));
+            Frogs.get(i).FrogBestMove(Snakes, AllPoints, ROWS, COLUMNS);
         }
-        /// Snake number 0 is player snake
-        Snakes.get(0).Direction = PlayerDirection;
+        drawSnake(gc, Snakes.get(0));
+        Snakes.get(0).MoveSnake(PlayerDirection);
 
-        for (int i = 0; i < Snakes.size(); i++) {
-            drawSnake(gc, Snakes.get(i));
-            Snakes.get(i).MoveSnake();
-        }
+        //for (int i = 1; i < Snakes.size(); i++) {
+        //    drawSnake(gc, Snakes.get(i));
+        //    Snakes.get(i).MoveSnake(PlayerDirection);
+        // }
         drawScore();
         gameOver();
         Scoring();
@@ -203,6 +205,7 @@ public class Game {
         gc.setFont(new Font("Digital-7", 70));
         gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
     }
+
     public void gameOver() {
 
         //Snake is out of the bound
@@ -257,7 +260,7 @@ public class Game {
                     Snakes.get(i).Eat();
                     Snakes.get(i).Eat();
                     Frogs.remove(f);
-                    Frogs.add(new Frog(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
+                    Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
                     Snakes.get(i).score += 10;
                 }
             }
@@ -265,5 +268,39 @@ public class Game {
 
     }
 
+    private void SumOfOTakenPoints() {
+        AllPoints.clear();
+        for (Food food : Foods) {
+            AllPoints.add(food.coordinates);
+        }
+        for (Frog forg : Frogs) {
+            AllPoints.add(forg.coordinates);
+        }
+        for (Snake snake : Snakes) {
+            AllPoints.addAll(snake.snakeBody);
+        }
+        for (Wall wall : Walls) {
+            AllPoints.addAll(wall.segments);
+        }
 
+    }
+
+    private void SumOfOTakenPoints(Frog WithOutThis) {
+        AllPoints.clear();
+        for (Food food : Foods) {
+            AllPoints.add(food.coordinates);
+        }
+        for (Frog frog : Frogs) {
+            if (frog != WithOutThis) {
+                AllPoints.add(frog.coordinates);
+            }
+        }
+        for (Snake snake : Snakes) {
+            AllPoints.addAll(snake.snakeBody);
+        }
+        for (Wall wall : Walls) {
+            AllPoints.addAll(wall.segments);
+        }
+
+    }
 }
