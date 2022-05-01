@@ -125,7 +125,8 @@ public class Game {
 
         for (int i = 1; i < Snakes.size(); i++) {
             drawSnake(gc, Snakes.get(i));
-            Snakes.get(i).MoveSnake(Snakes.get(i).Direction);
+            Snakes.get(i).SnakeBestMove(Snakes, Foods, Frogs, Walls);
+            //Snakes.get(i).MoveSnake(Snakes.get(i).Direction);
          }
         drawScore();
         gameOver(Snakes,Walls);

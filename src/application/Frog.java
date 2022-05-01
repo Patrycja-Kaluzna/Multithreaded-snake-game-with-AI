@@ -121,7 +121,6 @@ public class Frog {
             }
             coordinates = SAVECOR;
         }
-        System.out.println(Game.HEIGHT);
         MoveFrog(BestMove);
         if (BestMove == 4) {
             Direction = SAVEDIR;
