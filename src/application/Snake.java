@@ -23,9 +23,9 @@ public class Snake {
 
     Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color, int direction) {
         for (int i = 0; i < LenghtOfSnake; i++) {
-            if(i==0){
-            snakeBody.add(new Point(StartXpos, StartYpos));
-        }else {
+            if (i == 0) {
+                snakeBody.add(new Point(StartXpos, StartYpos));
+            } else {
                 snakeBody.add(new Point(-1, -1));
             }
         }
@@ -84,7 +84,7 @@ public class Snake {
     }
 
     public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls) {
-        double wynik = 0, najWynik = -10000;
+        int wynik = 0, najWynik = -10000;
         int BestMove = 3;
         List<Point> SAVECOR = new ArrayList();
         for (int i = 0; i < snakeBody.size(); i++) {
@@ -96,7 +96,7 @@ public class Snake {
             MoveSnake(a);
 
             wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 17, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            System.out.println("Wynik: "+ wynik);
+            System.out.printf("Wynik: %d \n", wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;
                 BestMove = a;
@@ -108,7 +108,7 @@ public class Snake {
             }
             snakeHead = snakeBody.get(0);
         }
-        System.out.println("BEST: "+BestMove);
+        System.out.println("BEST: " + BestMove);
         MoveSnake(BestMove);
     }
 
@@ -116,15 +116,25 @@ public class Snake {
         boolean loop = true;
         int wynik = 0;
         int najWynik = -10000;
-        int PlayerDir=Snakes.get(0).Direction;
-        List<Point> SAVECORCOMP = new ArrayList();
-        for (int i = 0; i < snakeBody.size(); i++) {
-            SAVECORCOMP.add((Point) snakeBody.get(i).clone());
-        }
+
+        int PlayerDir = Snakes.get(0).Direction;
+        int PlayerScore=Snakes.get(0).score;
+        int CompScore=Snakes.get(1).score;
+        List<Point> FoodsSave=new ArrayList<>();
         List<Point> SAVECORPLAYER = new ArrayList();
+        List<Point> SAVECOMP = new ArrayList();
+
+        for (int i = 0; i < Foods.size(); i++) {
+            FoodsSave.add((Point) Foods.get(i).Coordinates.clone());
+        }
+        for (int i = 0; i < snakeBody.size(); i++) {
+            SAVECOMP.add((Point) snakeBody.get(i).clone());
+        }
         for (int i = 0; i < Snakes.get(0).snakeBody.size(); i++) {
             SAVECORPLAYER.add((Point) Snakes.get(0).snakeBody.get(i).clone());
         }
+
+
         Game.gameOver(Snakes, Walls);
         for (int i = 0; i < Snakes.size(); i++) {
             if (Snakes.get(i).gameOver == true) {
@@ -135,7 +145,6 @@ public class Snake {
                     Snakes.get(i).gameOver = false;
                     return (Integer.MIN_VALUE + glem);
                 }
-
             }
         }
 
@@ -145,12 +154,12 @@ public class Snake {
                 for (int a = 3; a >= 0 && loop; a--) {
 
                     MoveSnake(a);
-
                     wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP, alpha, beta, false);
                     snakeBody.clear();
-                    for (int i = 0; i < SAVECORCOMP.size(); i++) {
-                        snakeBody.add((Point) SAVECORCOMP.get(i).clone());
+                    for (int i = 0; i < SAVECOMP.size(); i++) {
+                        snakeBody.add((Point) SAVECOMP.get(i).clone());
                     }
+
                     snakeHead = snakeBody.get(0);
                     if (wynik > najWynik) {
                         najWynik = wynik;
@@ -173,7 +182,7 @@ public class Snake {
                         Snakes.get(0).snakeBody.add((Point) SAVECORPLAYER.get(i).clone());
                     }
                     Snakes.get(0).snakeHead = Snakes.get(0).snakeBody.get(0);
-                    Snakes.get(0).Direction=PlayerDir;
+                    Snakes.get(0).Direction = PlayerDir;
                     if (wynik < najWynik) {
                         najWynik = wynik;
                     }
@@ -189,7 +198,6 @@ public class Snake {
         } else {
             return 0;
         }
-
     }
 
 

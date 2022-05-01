@@ -94,7 +94,7 @@ public class Game {
         Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2)))));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
-        Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+        //Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -108,7 +108,7 @@ public class Game {
         }
         for(int i=1;i<Snakes.size();i++){
             if(Snakes.get(i).gameOver==true){
-                Snakes.remove(i);
+               // Snakes.remove(i);
                 System.out.println("DEADDDDDDDDDDDDDDD");
             }
         }
@@ -129,9 +129,10 @@ public class Game {
             Snakes.get(i).SnakeBestMove(Snakes, Foods, Frogs, Walls);
             //Snakes.get(i).MoveSnake(Snakes.get(i).Direction);
          }
+
         drawScore();
         gameOver(Snakes,Walls);
-        Scoring(Snakes,Foods, Frogs,Walls);
+        Scoring(Snakes,Foods, Frogs,Walls,false);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,13 +262,16 @@ public class Game {
         }
     }
 
-    private static void Scoring(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs,List<Wall> Walls) {
+    public static void Scoring(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs,List<Wall> Walls,boolean AI) {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {
                     Snakes.get(i).Eat();
+
                     Foods.remove(f);
-                    Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
+                    if(AI==false) {
+                        Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+                    }
                     Snakes.get(i).score += 5;
                 }
             }
@@ -276,7 +280,9 @@ public class Game {
                     Snakes.get(i).Eat();
                     Snakes.get(i).Eat();
                     Frogs.remove(f);
-                    Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+                    if(AI==false) {
+                        Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+                    }
                     Snakes.get(i).score += 10;
                 }
             }
