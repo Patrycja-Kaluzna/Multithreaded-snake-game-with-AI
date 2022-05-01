@@ -16,6 +16,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Snake");
         primaryStage.getIcons().add(new Image("img/icon.jpg"));
+        primaryStage.setResizable(false);
         Parent root = FXMLLoader.load(getClass().getResource("IntroScene.fxml"));
 
         Scene scene = new Scene(root);

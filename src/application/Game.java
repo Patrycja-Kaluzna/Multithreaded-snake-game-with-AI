@@ -24,8 +24,8 @@ import java.util.List;
 
 
 public class Game {
-    private static double WIDTH = 800;
-    private static double HEIGHT = WIDTH;
+    public static double WIDTH = 800;
+    public static double HEIGHT = WIDTH;
     private static final int ROWS = 21;
     private static final int COLUMNS = ROWS;
     private static double SQUARE_SIZE = WIDTH / ROWS;
@@ -36,6 +36,7 @@ public class Game {
 
     private GraphicsContext gc;
     private int PlayerDirection;
+    private boolean KeyLock=false;
 
     private List<Snake> Snakes = new ArrayList();
     private List<Fruit> Foods = new ArrayList<>();
@@ -61,23 +62,29 @@ public class Game {
             @Override
             public void handle(KeyEvent event) {
                 KeyCode code = event.getCode();
+                if(KeyLock==false){
                 if (code == KeyCode.RIGHT || code == KeyCode.D) {
                     if (PlayerDirection != LEFT) {
                         PlayerDirection = RIGHT;
+                        KeyLock=true;
                     }
                 } else if (code == KeyCode.LEFT || code == KeyCode.A) {
                     if (PlayerDirection != RIGHT) {
                         PlayerDirection = LEFT;
+                        KeyLock=true;
                     }
                 } else if (code == KeyCode.UP || code == KeyCode.W) {
                     if (PlayerDirection != DOWN) {
                         PlayerDirection = UP;
+                        KeyLock=true;
                     }
                 } else if (code == KeyCode.DOWN || code == KeyCode.S) {
                     if (PlayerDirection != UP) {
                         PlayerDirection = DOWN;
+                        KeyLock=true;
                     }
                 }
+            }
             }
         });
 
@@ -108,14 +115,15 @@ public class Game {
         }
         drawSnake(gc, Snakes.get(0));
         Snakes.get(0).MoveSnake(PlayerDirection);
+        KeyLock=false;
 
         //for (int i = 1; i < Snakes.size(); i++) {
         //    drawSnake(gc, Snakes.get(i));
         //    Snakes.get(i).MoveSnake(PlayerDirection);
         // }
         drawScore();
-        gameOver();
-        Scoring();
+        gameOver(Snakes,Walls);
+        Scoring(Snakes,Foods, Frogs,Walls);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +214,7 @@ public class Game {
         gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
     }
 
-    public void gameOver() {
+    public static void gameOver(List<Snake> Snakes, List<Wall> Walls) {
 
         //Snake is out of the bound
         for (int a = 0; a < Snakes.size(); a++) {
@@ -245,7 +253,7 @@ public class Game {
         }
     }
 
-    private void Scoring() {
+    private static void Scoring(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs,List<Wall> Walls) {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {

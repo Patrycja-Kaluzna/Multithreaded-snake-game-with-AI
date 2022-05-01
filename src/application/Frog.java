@@ -94,7 +94,7 @@ public class Frog {
     }
 
 
-    void FrogBestMove(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS) {
+    public void FrogBestMove(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS) {
         double wynik = 0, najWynik = -10000;
         boolean FREE;
         int BestMove = 4;
@@ -121,7 +121,7 @@ public class Frog {
             }
             coordinates = SAVECOR;
         }
-        System.out.println(BestMove);
+        System.out.println(Game.HEIGHT);
         MoveFrog(BestMove);
         if (BestMove == 4) {
             Direction = SAVEDIR;
