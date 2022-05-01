@@ -89,6 +89,7 @@ public class Game {
         });
 
         Snakes.add(new Snake(3, ROWS / 2, ROWS / 4, "/img/Snake_Head.png", "00b0ff", RIGHT));
+        Snakes.add(new Snake(3, ROWS / 2, ROWS-(ROWS / 4), "/img/Snake_Head_2.png", "ffcc00", LEFT));
         PlayerDirection = Snakes.get(0).Direction;
         Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2)))));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
@@ -105,6 +106,11 @@ public class Game {
             drawGameOver(gc);
             return;
         }
+        for(int i=1;i<Snakes.size();i++){
+            if(Snakes.get(i).gameOver==true){
+                Snakes.remove(i);
+            }
+        }
         drawBackground(gc);
         drawFood(gc);
         drawWall(gc);
@@ -117,10 +123,10 @@ public class Game {
         Snakes.get(0).MoveSnake(PlayerDirection);
         KeyLock=false;
 
-        //for (int i = 1; i < Snakes.size(); i++) {
-        //    drawSnake(gc, Snakes.get(i));
-        //    Snakes.get(i).MoveSnake(PlayerDirection);
-        // }
+        for (int i = 1; i < Snakes.size(); i++) {
+            drawSnake(gc, Snakes.get(i));
+            Snakes.get(i).MoveSnake(Snakes.get(i).Direction);
+         }
         drawScore();
         gameOver(Snakes,Walls);
         Scoring(Snakes,Foods, Frogs,Walls);
