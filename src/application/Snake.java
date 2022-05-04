@@ -35,6 +35,18 @@ public class Snake {
         Direction = direction;
     }
 
+    Snake(Snake snake){
+        this.Direction=snake.Direction;
+        this.gameOver= snake.gameOver;
+        this.Color=snake.Color;
+        this.Head= snake.Head;
+        this.score=snake.score;
+        for (int i = 0; i < snake.snakeBody.size(); i++) {
+            this.snakeBody.add((Point) snake.snakeBody.get(i).clone());
+        }
+        this.snakeHead=this.snakeBody.get(0);
+    }
+
     public void MoveSnake(int chosenDirection) {
         if (chosenDirection == RIGHT || chosenDirection == LEFT || chosenDirection == UP || chosenDirection == DOWN) {
             Direction = chosenDirection;
@@ -123,6 +135,8 @@ public class Snake {
         List<Point> FoodsSave=new ArrayList<>();
         List<Point> SAVECORPLAYER = new ArrayList();
         List<Point> SAVECOMP = new ArrayList();
+
+        Snake ComSaveSnake = new Snake(Snakes.get(1));
 
         for (int i = 0; i < Foods.size(); i++) {
             FoodsSave.add((Point) Foods.get(i).Coordinates.clone());
