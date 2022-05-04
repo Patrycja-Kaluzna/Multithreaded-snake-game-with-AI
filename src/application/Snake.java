@@ -21,6 +21,20 @@ public class Snake {
 
     public boolean gameOver = false;
 
+    public void CloneSnake(Snake snake){
+        this.Direction=snake.Direction;
+//        this.gameOver= snake.gameOver;
+//        this.Color=snake.Color;
+//        this.Head= snake.Head;
+        this.score=snake.score;
+        this.snakeBody.clear();
+        for (int i = 0; i < snake.snakeBody.size(); i++) {
+            this.snakeBody.add((Point) snake.snakeBody.get(i).clone());
+        }
+        this.snakeHead=this.snakeBody.get(0);
+
+    }
+
     Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color, int direction) {
         for (int i = 0; i < LenghtOfSnake; i++) {
             if (i == 0) {
@@ -107,7 +121,7 @@ public class Snake {
 
             MoveSnake(a);
 
-            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 17, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 10, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
             System.out.printf("Wynik: %d \n", wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;
@@ -129,23 +143,14 @@ public class Snake {
         int wynik = 0;
         int najWynik = -10000;
 
-        int PlayerDir = Snakes.get(0).Direction;
-        int PlayerScore=Snakes.get(0).score;
-        int CompScore=Snakes.get(1).score;
-        List<Point> FoodsSave=new ArrayList<>();
-        List<Point> SAVECORPLAYER = new ArrayList();
-        List<Point> SAVECOMP = new ArrayList();
+        List<Fruit> FoodsSave=new ArrayList();
 
+        Snake PlayerSaveSnake = new Snake(Snakes.get(0));
         Snake ComSaveSnake = new Snake(Snakes.get(1));
 
+
         for (int i = 0; i < Foods.size(); i++) {
-            FoodsSave.add((Point) Foods.get(i).Coordinates.clone());
-        }
-        for (int i = 0; i < snakeBody.size(); i++) {
-            SAVECOMP.add((Point) snakeBody.get(i).clone());
-        }
-        for (int i = 0; i < Snakes.get(0).snakeBody.size(); i++) {
-            SAVECORPLAYER.add((Point) Snakes.get(0).snakeBody.get(i).clone());
+            FoodsSave.add(new Fruit(Foods.get(i)));
         }
 
 
@@ -168,13 +173,14 @@ public class Snake {
                 for (int a = 3; a >= 0 && loop; a--) {
 
                     MoveSnake(a);
+                    Game.ScoringForAI(Snakes,Foods,Frogs);
                     wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP, alpha, beta, false);
-                    snakeBody.clear();
-                    for (int i = 0; i < SAVECOMP.size(); i++) {
-                        snakeBody.add((Point) SAVECOMP.get(i).clone());
+                    CloneSnake(ComSaveSnake);
+                    Foods.clear();
+                    for (int i = 0; i < FoodsSave.size(); i++) {
+                        Foods.add(new Fruit(FoodsSave.get(i)));
                     }
 
-                    snakeHead = snakeBody.get(0);
                     if (wynik > najWynik) {
                         najWynik = wynik;
                     }
@@ -190,13 +196,13 @@ public class Snake {
                 najWynik = Integer.MAX_VALUE;
                 for (int a = 3; a >= 0 && loop; a--) {
                     Snakes.get(0).MoveSnake(a);
+                    Game.ScoringForAI(Snakes,Foods,Frogs);
                     wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP, alpha, beta, true);
-                    Snakes.get(0).snakeBody.clear();
-                    for (int i = 0; i < SAVECORPLAYER.size(); i++) {
-                        Snakes.get(0).snakeBody.add((Point) SAVECORPLAYER.get(i).clone());
+                    Snakes.get(0).CloneSnake(PlayerSaveSnake);
+                    Foods.clear();
+                    for (int i = 0; i < FoodsSave.size(); i++) {
+                        Foods.add(new Fruit(FoodsSave.get(i)));
                     }
-                    Snakes.get(0).snakeHead = Snakes.get(0).snakeBody.get(0);
-                    Snakes.get(0).Direction = PlayerDir;
                     if (wynik < najWynik) {
                         najWynik = wynik;
                     }
@@ -210,7 +216,7 @@ public class Snake {
                 return najWynik;
             }
         } else {
-            return 0;
+            return Snakes.get(1).score-Snakes.get(0).score;
         }
     }
 

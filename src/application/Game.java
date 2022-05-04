@@ -132,7 +132,7 @@ public class Game {
 
         drawScore();
         gameOver(Snakes,Walls);
-        Scoring(Snakes,Foods, Frogs,Walls,false);
+        Scoring(Snakes,Foods, Frogs,Walls);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,16 +262,14 @@ public class Game {
         }
     }
 
-    public static void Scoring(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs,List<Wall> Walls,boolean AI) {
+    public static void Scoring(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs,List<Wall> Walls) {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {
                     Snakes.get(i).Eat();
 
                     Foods.remove(f);
-                    if(AI==false) {
-                        Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
-                    }
+                    Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
                     Snakes.get(i).score += 5;
                 }
             }
@@ -280,14 +278,34 @@ public class Game {
                     Snakes.get(i).Eat();
                     Snakes.get(i).Eat();
                     Frogs.remove(f);
-                    if(AI==false) {
-                        Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
-                    }
+                    Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+
                     Snakes.get(i).score += 10;
                 }
             }
         }
 
+    }
+
+    public static void ScoringForAI(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs) {
+        for (int i = 0; i < Snakes.size(); i++) {
+            for (int f = 0; f < Foods.size(); f++) {
+                if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {
+                    Snakes.get(i).Eat();
+
+                    Foods.remove(f);
+                    Snakes.get(i).score += 5;
+                }
+            }
+            for (int f = 0; f < Frogs.size(); f++) {
+                if (Snakes.get(i).snakeHead.getX() == Frogs.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() == Frogs.get(f).coordinates.getY()) {
+                    Snakes.get(i).Eat();
+                    Snakes.get(i).Eat();
+                    Frogs.remove(f);
+                    Snakes.get(i).score += 10;
+                }
+            }
+        }
     }
 
     private void SumOfOTakenPoints() {
