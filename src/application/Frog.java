@@ -19,6 +19,15 @@ public class Frog {
         GenerateFrog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS);
     }
 
+    public void FrogClone (Frog frog){
+        this.coordinates=(Point) frog.coordinates.clone();
+        this.Direction= frog.Direction;
+    }
+    Frog(Frog frog) {
+        this.coordinates=(Point) frog.coordinates.clone();
+        this.Direction= frog.Direction;
+    }
+
     public void GenerateFrog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         start:
         while (true) {
@@ -155,6 +164,10 @@ public class Frog {
             }
             return najWynik;
         }
+       // int TotalDistance=0;
+       // for(int i=0; i<Snakes.size();i++){
+       //     TotalDistance+=  Math.hypot(Snakes.get(i).snakeHead.getX() - coordinates.getX(), Snakes.get(i).snakeHead.getY() - coordinates.getY());
+       // }
 
         return Math.hypot(Snakes.get(0).snakeHead.getX() - coordinates.getX(), Snakes.get(0).snakeHead.getY() - coordinates.getY());
     }

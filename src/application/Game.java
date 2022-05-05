@@ -111,7 +111,7 @@ public class Game {
         }
         for(int i=1;i<Snakes.size();i++){
             if(Snakes.get(i).gameOver==true){
-               // Snakes.remove(i);
+                Snakes.remove(i);
                 System.out.println("DEADDDDDDDDDDDDDDD");
             }
         }

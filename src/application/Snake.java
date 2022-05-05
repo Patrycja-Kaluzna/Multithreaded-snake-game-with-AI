@@ -113,6 +113,7 @@ public class Snake {
     public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls,int GameSize) {
         int wynik = 0, najWynik = -10000;
         int BestMove = 3;
+        List<Frog> FrogsSave=new ArrayList<>();
         List<Fruit> FoodsSave=new ArrayList();
         Snake ComSaveSnake = new Snake(Snakes.get(1));
         Snake PlayerSaveSnake = new Snake(Snakes.get(0));
@@ -120,12 +121,15 @@ public class Snake {
         for (int i = 0; i < Foods.size(); i++) {
             FoodsSave.add(new Fruit(Foods.get(i)));
         }
+//        for (int i = 0; i < Frogs.size(); i++) {
+//            FrogsSave.add(new Frog(Frogs.get(i)));
+//        }
 
         for (int a = 3; a >= 0; a--) {
 
             MoveSnake(a);
             Game.ScoringForAI(Snakes,Foods,Frogs);
-            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 12, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 13, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
             System.out.println(wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;
@@ -138,8 +142,12 @@ public class Snake {
             for (int i = 0; i < FoodsSave.size(); i++) {
                 Foods.add(new Fruit(FoodsSave.get(i)));
             }
+//            Frogs.clear();
+//            for (int i = 0; i < FrogsSave.size(); i++) {
+//                Frogs.add(new Frog(FrogsSave.get(i)));
+//            }
         }
-        System.out.println();
+       System.out.println(BestMove+ " TO BEST");
         MoveSnake(BestMove);
     }
 
@@ -148,7 +156,7 @@ public class Snake {
         int wynik = 0;
         int najWynik = -10000;
 
-        int save=Snakes.get(1).score;
+        List<Frog> FrogsSave=new ArrayList<>();
         List<Fruit> FoodsSave=new ArrayList();
 
         Snake PlayerSaveSnake = new Snake(Snakes.get(0));
@@ -159,16 +167,25 @@ public class Snake {
             FoodsSave.add(new Fruit(Foods.get(i)));
         }
 
+//        for (int i = 0; i < Frogs.size(); i++) {
+//            FrogsSave.add(new Frog(Frogs.get(i)));
+//        }
+
 
         Game.gameOver(Snakes, Walls);
-        for (int i = 0; i < Snakes.size(); i++) {
+        for (int i = Snakes.size()-1; i >=0; i--) {
             if (Snakes.get(i).gameOver == true) {
+                if(i!=0){
+                    for (int a = Snakes.size()-1; a >=0; a--){
+                    Snakes.get(a).gameOver = false;
+                    }
+                    return (Integer.MIN_VALUE );
+                }
                 if (i == 0) {
-                    Snakes.get(i).gameOver = false;
-                    return (Integer.MAX_VALUE - glem);
-                } else {
-                    Snakes.get(i).gameOver = false;
-                    return (Integer.MIN_VALUE + glem);
+                    for (int a = Snakes.size()-1; a >=0; a--){
+                        Snakes.get(a).gameOver = false;
+                    }
+                    return (Integer.MAX_VALUE );
                 }
             }
         }
@@ -186,6 +203,10 @@ public class Snake {
                     for (int i = 0; i < FoodsSave.size(); i++) {
                         Foods.add(new Fruit(FoodsSave.get(i)));
                     }
+//                    Frogs.clear();
+//                    for (int i = 0; i < FrogsSave.size(); i++) {
+//                        Frogs.add(new Frog(FrogsSave.get(i)));
+//                    }
 
                     if (wynik > najWynik) {
                         najWynik = wynik;
@@ -209,6 +230,10 @@ public class Snake {
                     for (int i = 0; i < FoodsSave.size(); i++) {
                         Foods.add(new Fruit(FoodsSave.get(i)));
                     }
+//                    Frogs.clear();
+//                    for (int i = 0; i < FrogsSave.size(); i++) {
+//                        Frogs.add(new Frog(FrogsSave.get(i)));
+//                    }
                     if (wynik < najWynik) {
                         najWynik = wynik;
                     }
@@ -222,7 +247,6 @@ public class Snake {
                 return najWynik;
             }
         } else {
-           // return ((Snakes.get(1).score)*100)-glem;
             int Total_distance=0;
             for (int i = 0; i < Foods.size(); i++) {
                 Total_distance+=(int)Math.ceil(Math.hypot(this.snakeHead.getX() - Foods.get(i).Coordinates.getX(), this.snakeHead.getY() - Foods.get(i).Coordinates.getY()));
