@@ -121,9 +121,9 @@ public class Snake {
         for (int i = 0; i < Foods.size(); i++) {
             FoodsSave.add(new Fruit(Foods.get(i)));
         }
-//        for (int i = 0; i < Frogs.size(); i++) {
-//            FrogsSave.add(new Frog(Frogs.get(i)));
-//        }
+        for (int i = 0; i < Frogs.size(); i++) {
+            FrogsSave.add(new Frog(Frogs.get(i)));
+        }
 
         for (int a = 3; a >= 0; a--) {
 
@@ -142,10 +142,10 @@ public class Snake {
             for (int i = 0; i < FoodsSave.size(); i++) {
                 Foods.add(new Fruit(FoodsSave.get(i)));
             }
-//            Frogs.clear();
-//            for (int i = 0; i < FrogsSave.size(); i++) {
-//                Frogs.add(new Frog(FrogsSave.get(i)));
-//            }
+            Frogs.clear();
+            for (int i = 0; i < FrogsSave.size(); i++) {
+                Frogs.add(new Frog(FrogsSave.get(i)));
+            }
         }
        System.out.println(BestMove+ " TO BEST");
         MoveSnake(BestMove);

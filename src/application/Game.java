@@ -97,7 +97,7 @@ public class Game {
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
 
-        //Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+        Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();

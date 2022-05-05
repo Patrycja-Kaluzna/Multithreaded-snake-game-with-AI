@@ -164,11 +164,12 @@ public class Frog {
             }
             return najWynik;
         }
-       // int TotalDistance=0;
-       // for(int i=0; i<Snakes.size();i++){
-       //     TotalDistance+=  Math.hypot(Snakes.get(i).snakeHead.getX() - coordinates.getX(), Snakes.get(i).snakeHead.getY() - coordinates.getY());
-       // }
+        int TotalDistance=0;
+        for(int i=0; i<Snakes.size();i++){
+            TotalDistance+=  Math.hypot(Snakes.get(i).snakeHead.getX() - coordinates.getX(), Snakes.get(i).snakeHead.getY() - coordinates.getY());
+        }
 
-        return Math.hypot(Snakes.get(0).snakeHead.getX() - coordinates.getX(), Snakes.get(0).snakeHead.getY() - coordinates.getY());
+        //return Math.hypot(Snakes.get(0).snakeHead.getX() - coordinates.getX(), Snakes.get(0).snakeHead.getY() - coordinates.getY());
+        return  TotalDistance;
     }
 }
