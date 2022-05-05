@@ -94,6 +94,9 @@ public class Game {
         Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2)))));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
+
         //Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -126,7 +129,7 @@ public class Game {
 
         for (int i = 1; i < Snakes.size(); i++) {
             drawSnake(gc, Snakes.get(i));
-            Snakes.get(i).SnakeBestMove(Snakes, Foods, Frogs, Walls);
+            Snakes.get(i).SnakeBestMove(Snakes, Foods, Frogs, Walls,ROWS);
             //Snakes.get(i).MoveSnake(Snakes.get(i).Direction);
          }
 
@@ -284,7 +287,6 @@ public class Game {
                 }
             }
         }
-
     }
 
     public static void ScoringForAI(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs) {

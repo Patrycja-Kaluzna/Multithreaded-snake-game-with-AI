@@ -55,6 +55,7 @@ public class Snake {
         this.Color=snake.Color;
         this.Head= snake.Head;
         this.score=snake.score;
+        this.snakeBody.clear();
         for (int i = 0; i < snake.snakeBody.size(); i++) {
             this.snakeBody.add((Point) snake.snakeBody.get(i).clone());
         }
@@ -109,40 +110,45 @@ public class Snake {
         snakeBody.add(new Point(-1, -1));
     }
 
-    public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls) {
+    public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls,int GameSize) {
         int wynik = 0, najWynik = -10000;
         int BestMove = 3;
-        List<Point> SAVECOR = new ArrayList();
-        for (int i = 0; i < snakeBody.size(); i++) {
-            SAVECOR.add((Point) snakeBody.get(i).clone());
+        List<Fruit> FoodsSave=new ArrayList();
+        Snake ComSaveSnake = new Snake(Snakes.get(1));
+        Snake PlayerSaveSnake = new Snake(Snakes.get(0));
+
+        for (int i = 0; i < Foods.size(); i++) {
+            FoodsSave.add(new Fruit(Foods.get(i)));
         }
 
         for (int a = 3; a >= 0; a--) {
 
             MoveSnake(a);
-
-            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 10, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            System.out.printf("Wynik: %d \n", wynik);
+            Game.ScoringForAI(Snakes,Foods,Frogs);
+            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 12, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            System.out.println(wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;
                 BestMove = a;
             }
 
-            snakeBody.clear();
-            for (int i = 0; i < SAVECOR.size(); i++) {
-                snakeBody.add((Point) SAVECOR.get(i).clone());
+            this.CloneSnake(ComSaveSnake);
+            Snakes.get(0).CloneSnake(PlayerSaveSnake);
+            Foods.clear();
+            for (int i = 0; i < FoodsSave.size(); i++) {
+                Foods.add(new Fruit(FoodsSave.get(i)));
             }
-            snakeHead = snakeBody.get(0);
         }
-        System.out.println("BEST: " + BestMove);
+        System.out.println();
         MoveSnake(BestMove);
     }
 
-    int SnakeAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int glem, int MAXGLEMP, int alpha, int beta, boolean toKomp) {
+    int SnakeAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int glem, int MAXGLEMP,int GameSize, int alpha, int beta, boolean toKomp) {
         boolean loop = true;
         int wynik = 0;
         int najWynik = -10000;
 
+        int save=Snakes.get(1).score;
         List<Fruit> FoodsSave=new ArrayList();
 
         Snake PlayerSaveSnake = new Snake(Snakes.get(0));
@@ -174,7 +180,7 @@ public class Snake {
 
                     MoveSnake(a);
                     Game.ScoringForAI(Snakes,Foods,Frogs);
-                    wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP, alpha, beta, false);
+                    wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP,GameSize, alpha, beta, false);
                     CloneSnake(ComSaveSnake);
                     Foods.clear();
                     for (int i = 0; i < FoodsSave.size(); i++) {
@@ -197,7 +203,7 @@ public class Snake {
                 for (int a = 3; a >= 0 && loop; a--) {
                     Snakes.get(0).MoveSnake(a);
                     Game.ScoringForAI(Snakes,Foods,Frogs);
-                    wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP, alpha, beta, true);
+                    wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP,GameSize, alpha, beta, true);
                     Snakes.get(0).CloneSnake(PlayerSaveSnake);
                     Foods.clear();
                     for (int i = 0; i < FoodsSave.size(); i++) {
@@ -216,7 +222,12 @@ public class Snake {
                 return najWynik;
             }
         } else {
-            return Snakes.get(1).score-Snakes.get(0).score;
+           // return ((Snakes.get(1).score)*100)-glem;
+            int Total_distance=0;
+            for (int i = 0; i < Foods.size(); i++) {
+                Total_distance+=(int)Math.ceil(Math.hypot(this.snakeHead.getX() - Foods.get(i).Coordinates.getX(), this.snakeHead.getY() - Foods.get(i).Coordinates.getY()));
+            }
+            return ((Snakes.get(1).score)*10000)-Total_distance;
         }
     }
 
