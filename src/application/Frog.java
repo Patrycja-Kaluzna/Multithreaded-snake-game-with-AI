@@ -122,7 +122,7 @@ public class Frog {
             }
 
             if (FREE && coordinates.getX() >= 0 && coordinates.getX() < COLUMNS && coordinates.getY() >= 0 && coordinates.getY() < ROWS) {
-                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 4);
+                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 8);
                 if (wynik > najWynik) {
                     najWynik = wynik;
                     BestMove = a;

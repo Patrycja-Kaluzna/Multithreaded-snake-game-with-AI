@@ -98,7 +98,7 @@ public class Game {
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
 
         Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(130), e -> run(gc)));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(170), e -> run(gc)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
@@ -112,7 +112,7 @@ public class Game {
         for(int i=1;i<Snakes.size();i++){
             if(Snakes.get(i).gameOver==true){
                 Snakes.remove(i);
-                System.out.println("DEADDDDDDDDDDDDDDD");
+            //    System.out.println("DEADDDDDDDDDDDDDDD");
             }
         }
         drawBackground(gc);

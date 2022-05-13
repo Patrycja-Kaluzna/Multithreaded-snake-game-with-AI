@@ -130,7 +130,7 @@ public class Snake {
             MoveSnake(a);
             Game.ScoringForAI(Snakes,Foods,Frogs);
             wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 10, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            System.out.println(wynik);
+           // System.out.println(wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;
                 BestMove = a;
@@ -147,7 +147,7 @@ public class Snake {
                 Frogs.add(new Frog(FrogsSave.get(i)));
             }
         }
-       System.out.println(BestMove+ " TO BEST");
+       //System.out.println(BestMove+ " TO BEST");
         MoveSnake(BestMove);
     }
 
@@ -156,7 +156,6 @@ public class Snake {
         int wynik = 0;
         int najWynik = -10000;
 
-        List<Frog> FrogsSave=new ArrayList<>();
         List<Fruit> FoodsSave=new ArrayList();
 
         Snake PlayerSaveSnake = new Snake(Snakes.get(0));
