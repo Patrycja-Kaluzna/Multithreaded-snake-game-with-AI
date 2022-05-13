@@ -1,0 +1,5 @@
+Ala 1000
+Bartek 450
+Guma 300
+Sylwia 250
+Robert 100
