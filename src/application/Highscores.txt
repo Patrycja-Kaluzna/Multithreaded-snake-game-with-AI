@@ -1,4 +1,4 @@
-Ala 1000
+Alan 1000
 Bartek 450
 Guma 300
 Sylwia 250
