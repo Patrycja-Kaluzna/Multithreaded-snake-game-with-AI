@@ -1,6 +1,9 @@
 Alan 1000
 Bartek 450
-Olaf 150
 Guma 300
-Sylwia 250
-Robert 100
+Franek 50
+Ernest 15
+maciek 10
+Sylwia 0
+Olaf 0
+Robert 0
