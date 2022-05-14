@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="IntroSceneParent" prefHeight="920.0" prefWidth="920.0" stylesheets="@IntroSceneStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GameOverControl">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#494d51" height="330.0" layoutX="198.0" layoutY="301.0" opacity="0.35" stroke="BLACK" strokeType="INSIDE" width="523.0" />
+      <Text fill="RED" layoutX="189.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME OVER" wrappingWidth="540.447998046875">
+         <font>
+            <Font name="Ink Free" size="96.0" />
+         </font>
+      </Text>
+      <Text fx:id="SCORE" fill="#ffb400" layoutX="332.0" layoutY="386.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SCORE: 1000">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Text>
+      <TextField fx:id="NAMEBOX" alignment="CENTER" layoutX="354.0" layoutY="521.0" opacity="0.58" prefHeight="60.0" prefWidth="210.0" promptText="NAME">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </TextField>
+      <Text layoutX="325.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR NAME:" wrappingWidth="269.57275390625">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Text>
+      <Button fx:id="TRY_AGAIN" layoutX="253.0" layoutY="700.0" mnemonicParsing="false" onAction="#TRY_AGAIN_click" text="TRY AGAIN">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
+      <Button fx:id="MENU" layoutX="547.0" layoutY="700.0" mnemonicParsing="false" onAction="#MENU_click" text="MENU">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

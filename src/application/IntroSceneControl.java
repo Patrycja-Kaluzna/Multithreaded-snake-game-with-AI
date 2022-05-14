@@ -20,7 +20,7 @@ public class IntroSceneControl {
     private Button EXIT_Button;
 
     //Start button handler
-    public void game_click(ActionEvent actionEvent) {
+    public void game_click(ActionEvent actionEvent) throws IOException {
         Game game= new Game();
         double size= (double) (((Node)actionEvent.getSource()).getScene().getHeight());
         game.Game_Start((Stage)((Node)actionEvent.getSource()).getScene().getWindow(),size);

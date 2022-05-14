@@ -4,7 +4,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,8 +20,10 @@ import javafx.util.Duration;
 
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 //test test test test
 
 
@@ -43,6 +47,8 @@ public class Game {
     private List<Frog> Frogs = new ArrayList<>();
     private List<Wall> Walls = new ArrayList<>();
     private List<Point> AllPoints = new ArrayList<>();
+    private Stage PrimStage;
+    private Timeline timeline;
 
     public void Game_Start(Stage primaryStage, double size) {
         //Inicjalizacja Sceny
@@ -53,6 +59,7 @@ public class Game {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
         Scene scene = new Scene(root);
+        PrimStage=primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
         gc = canvas.getGraphicsContext2D();
@@ -98,21 +105,42 @@ public class Game {
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
 
         Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(170), e -> run(gc)));
+        timeline = new Timeline(new KeyFrame(Duration.millis(170), e -> {
+            try {
+                run(gc);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
     }
 
 
-    private void run(GraphicsContext gc) {
+
+    private void run(GraphicsContext gc) throws InterruptedException, IOException {
         if (Snakes.get(0).gameOver) {
             drawGameOver(gc);
+
+            TimeUnit.SECONDS.sleep(1);
+            timeline.stop();
+            String score = Integer.toString(Snakes.get(0).score);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("GameOver.fxml"));
+            Parent root  = loader.load();
+            GameOverControl controller = loader.getController();
+            controller.setScore(score);
+            Scene scene = new Scene(root);
+            PrimStage.setScene(scene);
+            PrimStage.show();
+
             return;
         }
         for(int i=1;i<Snakes.size();i++){
             if(Snakes.get(i).gameOver==true){
                 Snakes.remove(i);
-            //    System.out.println("DEADDDDDDDDDDDDDDD");
             }
         }
         drawBackground(gc);
