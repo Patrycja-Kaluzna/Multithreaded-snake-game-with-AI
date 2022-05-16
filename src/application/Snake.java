@@ -129,7 +129,7 @@ public class Snake {
 
             MoveSnake(a);
             Game.ScoringForAI(Snakes,Foods,Frogs);
-            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 10, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 8, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
            // System.out.println(wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;

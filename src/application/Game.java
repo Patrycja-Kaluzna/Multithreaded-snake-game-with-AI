@@ -95,10 +95,15 @@ public class Game {
             }
         });
 
-        Snakes.add(new Snake(3, ROWS / 2, ROWS / 4, "/img/Snake_Head.png", "00b0ff", RIGHT));
-        Snakes.add(new Snake(3, ROWS / 2, ROWS-(ROWS / 4), "/img/Snake_Head_2.png", "ffcc00", LEFT));
+        Snakes.add(new Snake(3, 0, 0, "/img/Snake_Head.png", "00b0ff", DOWN));
+        Snakes.add(new Snake(3, ROWS-1 , ROWS-1, "/img/Snake_Head_2.png", "ffcc00", UP));
         PlayerDirection = Snakes.get(0).Direction;
-        Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2)))));
+       // Walls.add(new Wall(0, new Point((int) (Math.ceil(ROWS / 4)), (int) (Math.ceil(ROWS / 2))), new Point((int) (ROWS - Math.ceil(ROWS / 4)-1), (int) (Math.ceil(ROWS / 2)))));
+        //Walls.add(new Wall(1, new Point( (int) (Math.ceil(ROWS / 2)),(int) (Math.ceil(ROWS / 4))), new Point((int) (Math.ceil(ROWS / 2)),(int) (ROWS - Math.ceil(ROWS / 4)))));
+        //Walls.add(new Wall(1, new Point( 2,3 ), new Point(2,5)));
+        //Walls.add(new Wall(2,new Point(1,4),new Point(3,2)));
+//        Walls.add(new Wall(3,new Point(3,3),new Point(4,4)));
+        MapGenerator.Generate(Walls,2,ROWS);
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
         Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
@@ -123,19 +128,7 @@ public class Game {
 
     private void run(GraphicsContext gc) throws InterruptedException, IOException {
         if (Snakes.get(0).gameOver) {
-            drawGameOver(gc);
-
-            TimeUnit.SECONDS.sleep(1);
-            timeline.stop();
-            String score = Integer.toString(Snakes.get(0).score);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("GameOver.fxml"));
-            Parent root  = loader.load();
-            GameOverControl controller = loader.getController();
-            controller.setScore(score);
-            Scene scene = new Scene(root);
-            PrimStage.setScene(scene);
-            PrimStage.show();
-
+            drawGameOver();
             return;
         }
         for(int i=1;i<Snakes.size();i++){
@@ -158,9 +151,7 @@ public class Game {
         for (int i = 1; i < Snakes.size(); i++) {
             drawSnake(gc, Snakes.get(i));
             Snakes.get(i).SnakeBestMove(Snakes, Foods, Frogs, Walls,ROWS);
-            //Snakes.get(i).MoveSnake(Snakes.get(i).Direction);
          }
-
         drawScore();
         gameOver(Snakes,Walls);
         Scoring(Snakes,Foods, Frogs,Walls);
@@ -248,10 +239,17 @@ public class Game {
         gc.fillText("Score: " + Snakes.get(0).score, 10, 35);
     }
 
-    private void drawGameOver(GraphicsContext gc) {
-        gc.setFill(Color.RED);
-        gc.setFont(new Font("Digital-7", 70));
-        gc.fillText("Game Over", WIDTH / 3.5, HEIGHT / 2);
+    private void drawGameOver() throws InterruptedException, IOException {
+        TimeUnit.MILLISECONDS.sleep(500);
+        timeline.stop();
+        String score = Integer.toString(Snakes.get(0).score);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameOver.fxml"));
+        Parent root  = loader.load();
+        GameOverControl controller = loader.getController();
+        controller.setScore(score);
+        Scene scene = new Scene(root);
+        PrimStage.setScene(scene);
+        PrimStage.show();
     }
 
     public static void gameOver(List<Snake> Snakes, List<Wall> Walls) {
