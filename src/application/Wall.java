@@ -26,36 +26,41 @@ public class Wall {
                 segments.add(new Point(Builder));
                 Builder.x+=1;
             }
+            segments.add(new Point(Builder));
         }
 
         //Vertical
-        if (TypeOfWall == 1&&Start.getY()==End.getY()&&Start.getX()<=End.getX()) {
+        if (TypeOfWall == 1&&Start.getY()<=End.getY()&&Start.getX()==End.getX()) {
             segments.clear();
-            while (Builder.getY() != End.getY()) {
+            while (Builder.y != End.y) {
                 segments.add(new Point((int)(Builder.getX()), (int)(Builder.getY())));
 
-                Builder.x += 1;
+                Builder.y += 1;
 
             }
+            segments.add(new Point(Builder));
         }
 
         //Rising slope
         if (TypeOfWall == 2&&Start.getX()<=End.getX()&&Start.getY()>=End.getY()) {
             segments.clear();
-            while (Builder.getY() != End.getY() && Builder.getX() != End.getX()) {
-                segments.add(Builder);
+
+            while (Builder.x != End.x && Builder.y != End.y) {
+                segments.add(new Point(Builder));
                 Builder.x += 1;
-                Builder.y += 1;
+                Builder.y -= 1;
             }
+            segments.add(new Point(Builder));
         }
         //Decrasing slope
         if (TypeOfWall == 3&&Start.getX()<=End.getX()&&Start.getY()<=End.getY()) {
             segments.clear();
             while (Builder.getY() != End.getY() && Builder.getX() != End.getX()) {
-                segments.add(Builder);
-                Builder.x -= 1;
-                Builder.y -= 1;
+                segments.add(new Point(Builder));
+                Builder.x += 1;
+                Builder.y += 1;
             }
+            segments.add(new Point(Builder));
         }
 
     }

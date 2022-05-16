@@ -122,7 +122,7 @@ public class Frog {
             }
 
             if (FREE && coordinates.getX() >= 0 && coordinates.getX() < COLUMNS && coordinates.getY() >= 0 && coordinates.getY() < ROWS) {
-                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 8);
+                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 6);
                 if (wynik > najWynik) {
                     najWynik = wynik;
                     BestMove = a;
@@ -165,10 +165,16 @@ public class Frog {
             return najWynik;
         }
         int TotalDistance=0;
+        int minDistance=1000000000;
+        int pom;
         for(int i=0; i<Snakes.size();i++){
-            TotalDistance+=  Math.hypot(Snakes.get(i).snakeHead.getX() - coordinates.getX(), Snakes.get(i).snakeHead.getY() - coordinates.getY());
+            pom=(int)Math.round( Math.hypot(Snakes.get(i).snakeHead.getX() - coordinates.getX(), Snakes.get(i).snakeHead.getY() - coordinates.getY()));
+            if(minDistance>pom){
+                minDistance=pom;
+            }
+            TotalDistance+= pom;
         }
-
+        TotalDistance=TotalDistance*minDistance;
         //return Math.hypot(Snakes.get(0).snakeHead.getX() - coordinates.getX(), Snakes.get(0).snakeHead.getY() - coordinates.getY());
         return  TotalDistance;
     }

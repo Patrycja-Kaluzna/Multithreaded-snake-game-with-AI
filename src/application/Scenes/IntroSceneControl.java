@@ -1,5 +1,6 @@
-package application;
+package application.Scenes;
 
+import application.Game;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

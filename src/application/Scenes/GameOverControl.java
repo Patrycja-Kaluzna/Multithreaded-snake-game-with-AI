@@ -1,5 +1,7 @@
-package application;
+package application.Scenes;
 
+import application.Game;
+import application.Scores;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,7 +46,7 @@ public class GameOverControl {
             SaveScore();
             Stage stage;
             stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("IntroScene.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("Scenes/IntroScene.fxml"));
 
             Scene scene = new Scene(root);
             stage.setScene(scene);

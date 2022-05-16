@@ -21,7 +21,7 @@ public class Fruit implements Food {
         this.Coordinates=(Point) fruit.Coordinates.clone();
         this.fruitImage=fruit.fruitImage;
     }
-
+    @Override
     public void Generate(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         start:
         while (true) {

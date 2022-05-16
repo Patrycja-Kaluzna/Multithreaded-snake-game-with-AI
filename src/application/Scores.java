@@ -5,7 +5,7 @@ public class Scores implements Comparable <Scores> {
     public String name="";
     public int score=0;
 
-    Scores(String Name, int Score){
+    public Scores(String Name, int Score){
         name=Name;
         score=Score;
     }
