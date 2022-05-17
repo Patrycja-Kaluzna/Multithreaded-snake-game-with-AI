@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import java.awt.*;
 import java.util.List;
 
-public class Frog {
+public class Frog implements Frog_Interface{
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
     private static final int UP = 2;
@@ -89,19 +89,19 @@ public class Frog {
         }
     }
 
-    private void moveRight() {
+    public void moveRight() {
         this.coordinates.x++;
     }
 
-    private void moveLeft() {
+    public void moveLeft() {
         this.coordinates.x--;
     }
 
-    private void moveUp() {
+    public void moveUp() {
         this.coordinates.y--;
     }
 
-    private void moveDown() {
+    public void moveDown() {
         this.coordinates.y++;
     }
 
@@ -139,7 +139,7 @@ public class Frog {
         }
     }
 
-    private double FrogAI(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS, int glem, int MAXGLEMP) {
+    public double FrogAI(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS, int glem, int MAXGLEMP) {
         double wynik = 0;
         double najWynik = -10000;
         boolean FREE;

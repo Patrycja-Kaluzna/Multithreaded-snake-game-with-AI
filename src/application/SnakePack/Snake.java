@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Snake {
+public class Snake implements Snake_Interface {
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
     private static final int UP = 2;
@@ -93,19 +93,19 @@ public class Snake {
         }
     }
 
-    private void moveRight() {
+    public void moveRight() {
         snakeHead.x++;
     }
 
-    private void moveLeft() {
+    public void moveLeft() {
         snakeHead.x--;
     }
 
-    private void moveUp() {
+    public void moveUp() {
         snakeHead.y--;
     }
 
-    private void moveDown() {
+    public void moveDown() {
         snakeHead.y++;
     }
 
@@ -154,7 +154,7 @@ public class Snake {
         MoveSnake(BestMove);
     }
 
-    int SnakeAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int glem, int MAXGLEMP,int GameSize, int alpha, int beta, boolean toKomp) {
+    public int SnakeAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int glem, int MAXGLEMP,int GameSize, int alpha, int beta, boolean toKomp) {
         boolean loop = true;
         int wynik = 0;
         int najWynik = -10000;

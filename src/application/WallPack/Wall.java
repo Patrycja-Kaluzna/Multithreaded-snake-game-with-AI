@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wall {
+public class Wall implements Wall_Interface {
     public static final String Wall_Image = "/img/wall.png";
     public List<Point> segments = new ArrayList<>();
 

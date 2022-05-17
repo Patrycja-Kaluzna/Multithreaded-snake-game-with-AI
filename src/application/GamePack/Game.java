@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 //test test test test
 
 
-public class Game {
+public class Game implements Game_Interface {
     public static double WIDTH = 800;
     public static double HEIGHT = WIDTH;
     private static final int ROWS = 21;
@@ -158,7 +158,7 @@ public class Game {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private void drawBackground(GraphicsContext gc) {
+    public void drawBackground(GraphicsContext gc) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 if ((i + j) % 2 == 0) {
@@ -172,13 +172,13 @@ public class Game {
     }
 
 
-    private void drawFood(GraphicsContext gc) {
+    public void drawFood(GraphicsContext gc) {
         for (int i = 0; i < Foods.size(); i++) {
             gc.drawImage(Foods.get(i).fruitImage, Foods.get(i).Coordinates.getX() * SQUARE_SIZE, Foods.get(i).Coordinates.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         }
     }
 
-    private void drawWall(GraphicsContext gc) {
+    public void drawWall(GraphicsContext gc) {
         for (int i = 0; i < Walls.size(); i++) {
             for (int a = 0; a < Walls.get(i).segments.size(); a++) {
                 gc.drawImage(new Image(Walls.get(i).Wall_Image), Walls.get(i).segments.get(a).getX() * SQUARE_SIZE, Walls.get(i).segments.get(a).getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
@@ -186,7 +186,7 @@ public class Game {
         }
     }
 
-    private void drawFrog(GraphicsContext gc, Frog frog) {
+    public void drawFrog(GraphicsContext gc, Frog frog) {
         Image FrogImage = frog.frogImage;
         gc.save();
         gc.translate((frog.coordinates.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (frog.coordinates.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
@@ -207,7 +207,7 @@ public class Game {
     }
 
 
-    private void drawSnake(GraphicsContext gc, Snake snake) {
+   public void drawSnake(GraphicsContext gc, Snake snake) {
         Image SnakeHeadImage = new Image(snake.Head);
         gc.save();
         gc.translate((snake.snakeHead.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (snake.snakeHead.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
@@ -233,13 +233,13 @@ public class Game {
         }
     }
 
-    private void drawScore() {
+    public void drawScore() {
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("Digital-7", 35));
         gc.fillText("Score: " + Snakes.get(0).score, 10, 35);
     }
 
-    private void drawGameOver() throws InterruptedException, IOException {
+    public void drawGameOver() throws InterruptedException, IOException {
         TimeUnit.MILLISECONDS.sleep(500);
         timeline.stop();
         String score = Integer.toString(Snakes.get(0).score);
@@ -336,7 +336,7 @@ public class Game {
         }
     }
 
-    private void SumOfOTakenPoints() {
+    public void SumOfOTakenPoints() {
         AllPoints.clear();
         for (Fruit food : Foods) {
             AllPoints.add(food.Coordinates);
@@ -353,7 +353,7 @@ public class Game {
 
     }
 
-    private void SumOfOTakenPoints(Frog WithOutThis) {
+    public void SumOfOTakenPoints(Frog WithOutThis) {
         AllPoints.clear();
         for (Fruit food : Foods) {
             AllPoints.add(food.Coordinates);

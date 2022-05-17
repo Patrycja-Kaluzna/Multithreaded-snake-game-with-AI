@@ -4,6 +4,9 @@ Guma 300
 Ala 90
 assek 80
 Alanek 30
+m 25
+aaasasasasasasas 5
 a123 5
+aaa 0
 frogo 0
 Kasia 0
