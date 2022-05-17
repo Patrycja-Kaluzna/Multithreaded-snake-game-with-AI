@@ -1,6 +1,10 @@
-package application;
+package application.GamePack;
 
+import application.FrogPack.Frog;
+import application.FruitPack.Fruit;
 import application.Scenes.GameOverControl;
+import application.SnakePack.Snake;
+import application.WallPack.Wall;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -239,7 +243,7 @@ public class Game {
         TimeUnit.MILLISECONDS.sleep(500);
         timeline.stop();
         String score = Integer.toString(Snakes.get(0).score);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Scenes/GameOver.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Scenes/GameOver.fxml"));
         Parent root  = loader.load();
         GameOverControl controller = loader.getController();
         controller.setScore(score);

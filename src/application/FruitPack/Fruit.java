@@ -1,23 +1,25 @@
-package application;
+package application.FruitPack;
 
+import application.FrogPack.Frog;
+import application.SnakePack.Snake;
+import application.WallPack.Wall;
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 
-public class Fruit implements Food {
+public class Fruit implements Fruit_Interface {
     private static final String[] FOODS_IMAGE = new String[]{"/img/ic_orange.png", "/img/ic_apple.png", "/img/ic_cherry.png",
             "/img/ic_berry.png", "/img/ic_coconut_.png", "/img/ic_peach.png", "/img/ic_watermelon.png", "/img/ic_orange.png",
             "/img/ic_pomegranate.png"};
     public Image fruitImage;
     public Point Coordinates = new Point(0, 0);
 
-    Fruit(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
+    public Fruit(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         Generate(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS);
     }
 
-    Fruit(Fruit fruit) {
+    public Fruit(Fruit fruit) {
         this.Coordinates=(Point) fruit.Coordinates.clone();
         this.fruitImage=fruit.fruitImage;
     }

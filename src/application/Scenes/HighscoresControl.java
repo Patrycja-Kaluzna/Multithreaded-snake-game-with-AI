@@ -27,7 +27,7 @@ public class HighscoresControl {
 
    @FXML
    public void initialize() throws FileNotFoundException {
-       File file = new File("src/application/Highscores.txt");
+       File file = new File("src/application/HighScoresPack/Highscores.txt");
        Scanner sc =new Scanner(file);
 
        Player1.setText("1. "+sc.nextLine());
@@ -40,7 +40,7 @@ public class HighscoresControl {
     public void EXIT_Highscores(ActionEvent actionEvent) throws IOException {
         Stage stage;
         stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("Scenes/IntroScene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("IntroScene.fxml"));
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

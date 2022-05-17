@@ -1,4 +1,6 @@
-package application;
+package application.GamePack;
+
+import application.WallPack.Wall;
 
 import java.awt.*;
 import java.util.List;

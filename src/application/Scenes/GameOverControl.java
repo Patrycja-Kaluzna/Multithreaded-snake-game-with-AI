@@ -1,7 +1,7 @@
 package application.Scenes;
 
-import application.Game;
-import application.Scores;
+import application.GamePack.Game;
+import application.HighScoresPack.Scores;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +46,7 @@ public class GameOverControl {
             SaveScore();
             Stage stage;
             stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("Scenes/IntroScene.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("IntroScene.fxml"));
 
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -89,7 +89,7 @@ public class GameOverControl {
 
     public void SaveScore() throws FileNotFoundException {
         scores.clear();
-        File file = new File("src/application/Highscores.txt");
+        File file = new File("src/application/HighScoresPack/Highscores.txt");
         Scanner sc =new Scanner(file);
         String ScoreSplit[]= SCORE.getText().split(" ");
         scores.add(new Scores(NAMEBOX.getText(),Integer.parseInt(ScoreSplit[1])));
@@ -101,7 +101,7 @@ public class GameOverControl {
 //        for(Scores s : scores){
 //            System.out.println(s.name+" "+Integer.toString(s.score));
 //        }
-        File file1 = new File("src/application/Highscores.txt");
+        File file1 = new File("src/application/HighScoresPack/Highscores.txt");
         PrintWriter writer= new PrintWriter(file1);
         for(Scores s : scores){
            // System.out.println(s.name+" "+Integer.toString(s.score));

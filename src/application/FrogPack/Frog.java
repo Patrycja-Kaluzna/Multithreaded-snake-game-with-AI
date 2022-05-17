@@ -1,5 +1,8 @@
-package application;
+package application.FrogPack;
 
+import application.FruitPack.Fruit;
+import application.SnakePack.Snake;
+import application.WallPack.Wall;
 import javafx.scene.image.Image;
 
 import java.awt.*;
@@ -15,7 +18,7 @@ public class Frog {
     public Image frogImage = new Image("/img/frog.png");
     public Point coordinates = new Point(0, 0);
 
-    Frog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
+    public Frog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         GenerateFrog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS);
     }
 
@@ -23,7 +26,7 @@ public class Frog {
         this.coordinates=(Point) frog.coordinates.clone();
         this.Direction= frog.Direction;
     }
-    Frog(Frog frog) {
+    public Frog(Frog frog) {
         this.coordinates=(Point) frog.coordinates.clone();
         this.Direction= frog.Direction;
     }

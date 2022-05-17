@@ -1,6 +1,9 @@
-package application;
+package application.SnakePack;
 
-import com.sun.source.tree.DoWhileLoopTree;
+import application.FrogPack.Frog;
+import application.FruitPack.Fruit;
+import application.GamePack.Game;
+import application.WallPack.Wall;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class Snake {
 
     }
 
-    Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color, int direction) {
+    public Snake(int LenghtOfSnake, int StartXpos, int StartYpos, String head, String color, int direction) {
         for (int i = 0; i < LenghtOfSnake; i++) {
             if (i == 0) {
                 snakeBody.add(new Point(StartXpos, StartYpos));
@@ -110,7 +113,7 @@ public class Snake {
         snakeBody.add(new Point(-1, -1));
     }
 
-    public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls,int GameSize) {
+    public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int GameSize) {
         int wynik = 0, najWynik = -10000;
         int BestMove = 3;
         List<Frog> FrogsSave=new ArrayList<>();

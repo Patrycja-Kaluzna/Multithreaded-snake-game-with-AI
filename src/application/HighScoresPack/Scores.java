@@ -1,5 +1,5 @@
 
-package application;
+package application.HighScoresPack;
 
 public class Scores implements Comparable <Scores> {
     public String name="";

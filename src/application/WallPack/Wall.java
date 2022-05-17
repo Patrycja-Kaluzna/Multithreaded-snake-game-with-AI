@@ -1,4 +1,4 @@
-package application;
+package application.WallPack;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Wall {
     public static final String Wall_Image = "/img/wall.png";
-    List<Point> segments = new ArrayList<>();
+    public List<Point> segments = new ArrayList<>();
 
-    Wall(int TypeOfWall, Point Start, Point End) {
+    public Wall(int TypeOfWall, Point Start, Point End) {
 
         GenerateWall(TypeOfWall, Start , End);
     }
