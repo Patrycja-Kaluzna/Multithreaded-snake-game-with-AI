@@ -3,6 +3,7 @@ package application.GamePack;
 import application.FrogPack.Frog;
 import application.FrogPack.FrogThread;
 import application.FruitPack.Fruit;
+import application.FruitPack.FruitThread;
 import application.Scenes.GameOverControl;
 import application.SnakePack.ComSnakeThread;
 import application.SnakePack.PlayerSnakeThread;
@@ -57,7 +58,7 @@ public class Game implements Game_Interface {
     private List<Point> AllPoints = new ArrayList<>();
     private Stage PrimStage;
     private Timeline timeline;
-    private int numb = 0;
+
 
     public void Game_Start(Stage primaryStage, double size) {
         //Inicjalizacja Sceny
@@ -153,10 +154,11 @@ public class Game implements Game_Interface {
             drawSnake(gc, Snakes.get(i));
         }
         drawSnake(gc, Snakes.get(0));
+        drawScore();
 
         for (int i = 0; i < Frogs.size(); i++) {
             SumOfOTakenPoints(Frogs.get(i));
-            FrogThread objFrog = new FrogThread(Frogs.get(i), Snakes, AllPoints, ROWS, COLUMNS, numb);
+            FrogThread objFrog = new FrogThread(Frogs.get(i), Snakes, AllPoints, ROWS, COLUMNS);
             FrogThread = new Thread(objFrog);
             FrogThread.start();
         }
@@ -176,9 +178,7 @@ public class Game implements Game_Interface {
         PlayerThread.join();
         ComputerThread.join();
         Scoring(Snakes, Foods, Frogs, Walls);
-        drawScore();
         gameOver(Snakes, Walls);
-        numb = numb + 1;
 
     }
 
@@ -197,7 +197,7 @@ public class Game implements Game_Interface {
     }
 
 
-    public void drawFood(GraphicsContext gc) {
+    public  void drawFood(GraphicsContext gc) {
         for (int i = 0; i < Foods.size(); i++) {
             gc.drawImage(Foods.get(i).fruitImage, Foods.get(i).Coordinates.getX() * SQUARE_SIZE, Foods.get(i).Coordinates.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         }
@@ -211,7 +211,7 @@ public class Game implements Game_Interface {
         }
     }
 
-    public void drawFrog(GraphicsContext gc, Frog frog) {
+    public static void drawFrog(GraphicsContext gc, Frog frog) {
         Image FrogImage = frog.frogImage;
         gc.save();
         gc.translate((frog.coordinates.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (frog.coordinates.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
@@ -232,7 +232,7 @@ public class Game implements Game_Interface {
     }
 
 
-    public void drawSnake(GraphicsContext gc, Snake snake) {
+    public static void drawSnake(GraphicsContext gc, Snake snake) {
         Image SnakeHeadImage = new Image(snake.Head);
         gc.save();
         gc.translate((snake.snakeHead.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (snake.snakeHead.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
@@ -316,16 +316,26 @@ public class Game implements Game_Interface {
         }
     }
 
-    public static void Scoring(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls) {
+    public static void Scoring(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls) throws InterruptedException {
+        Thread ThreadF=null;
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {
                     Snakes.get(i).Eat();
-
-                    Foods.remove(f);
-                    Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
                     Snakes.get(i).score += 5;
+//                    Foods.remove(f);
+//                    Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+                    if(ThreadF!=null){
+                        ThreadF.join();
+                    }
+                    FruitThread obj = new FruitThread(Foods.get(f),Snakes,Foods,Walls,Frogs,ROWS,COLUMNS);
+                    ThreadF = new Thread(obj);
+                    ThreadF.start();
+
                 }
+            }
+            if(ThreadF!=null){
+                ThreadF.join();
             }
             for (int f = 0; f < Frogs.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Frogs.get(f).coordinates.getX() && Snakes.get(i).snakeHead.getY() == Frogs.get(f).coordinates.getY()) {

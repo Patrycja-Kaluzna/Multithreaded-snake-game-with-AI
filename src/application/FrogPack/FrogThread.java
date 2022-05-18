@@ -11,18 +11,16 @@ public class FrogThread implements Runnable {
     private List<Point> AllPoints;
     int ROWS;
     int COLUMNS;
-    int numbi;
-    public FrogThread(Frog fro, List<Snake> snakes, List<Point> OccupiedFields, int rows, int columns,int numb){
+
+    public FrogThread(Frog fro, List<Snake> snakes, List<Point> OccupiedFields, int rows, int columns){
         this.frog=fro;
         this.Snakes=snakes;
         this.AllPoints=OccupiedFields;
         this.ROWS=rows;
         this.COLUMNS=columns;
-        this.numbi=numb;
     }
 
     public void run(){
-        System.out.println(numbi);
         frog.FrogBestMove(Snakes, AllPoints, ROWS, COLUMNS);
     }
 }

@@ -14,8 +14,14 @@ public interface Game_Interface {
     void drawBackground(GraphicsContext gc);
     void drawFood(GraphicsContext gc);
     void drawWall(GraphicsContext gc);
-    void drawFrog(GraphicsContext gc, Frog frog);
-    void drawSnake(GraphicsContext gc, Snake snake);
+    static void drawFrog(GraphicsContext gc, Frog frog){
+
+    }
+
+    static void drawSnake(GraphicsContext gc, Snake snake) {
+
+    }
+
     void drawScore();
     void drawGameOver()throws InterruptedException, IOException;
     void SumOfOTakenPoints();

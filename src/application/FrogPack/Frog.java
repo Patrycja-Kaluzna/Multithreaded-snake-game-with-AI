@@ -125,7 +125,7 @@ public class Frog implements Frog_Interface{
             }
 
             if (FREE && this.coordinates.getX() >= 0 && this.coordinates.getX() < COLUMNS && this.coordinates.getY() >= 0 && this.coordinates.getY() < ROWS) {
-                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 6);
+                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 4);
                 if (wynik > najWynik) {
                     najWynik = wynik;
                     BestMove = a;
@@ -134,7 +134,7 @@ public class Frog implements Frog_Interface{
             this.coordinates = SAVECOR;
         }
         MoveFrog(BestMove);
-        System.out.println(this.coordinates);
+
         if (BestMove == 4) {
             Direction = SAVEDIR;
         }
