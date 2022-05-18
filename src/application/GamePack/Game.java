@@ -134,7 +134,6 @@ public class Game implements Game_Interface {
         Thread FrogThread = null;
         Thread PlayerThread = null;
         Thread ComputerThread = null;
-        Thread GeneratorThread = null;
         if (Snakes.get(0).gameOver) {
             drawGameOver();
             return;
