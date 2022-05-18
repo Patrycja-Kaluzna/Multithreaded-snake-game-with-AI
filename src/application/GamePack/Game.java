@@ -1,8 +1,11 @@
 package application.GamePack;
 
 import application.FrogPack.Frog;
+import application.FrogPack.FrogThread;
 import application.FruitPack.Fruit;
 import application.Scenes.GameOverControl;
+import application.SnakePack.ComSnakeThread;
+import application.SnakePack.PlayerSnakeThread;
 import application.SnakePack.Snake;
 import application.WallPack.Wall;
 import javafx.animation.Animation;
@@ -45,7 +48,7 @@ public class Game implements Game_Interface {
 
     private GraphicsContext gc;
     private int PlayerDirection;
-    private boolean KeyLock=false;
+    private boolean KeyLock = false;
 
     private List<Snake> Snakes = new ArrayList();
     private List<Fruit> Foods = new ArrayList<>();
@@ -54,6 +57,7 @@ public class Game implements Game_Interface {
     private List<Point> AllPoints = new ArrayList<>();
     private Stage PrimStage;
     private Timeline timeline;
+    private int numb = 0;
 
     public void Game_Start(Stage primaryStage, double size) {
         //Inicjalizacja Sceny
@@ -64,7 +68,7 @@ public class Game implements Game_Interface {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
         Scene scene = new Scene(root);
-        PrimStage=primaryStage;
+        PrimStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
         gc = canvas.getGraphicsContext2D();
@@ -74,40 +78,40 @@ public class Game implements Game_Interface {
             @Override
             public void handle(KeyEvent event) {
                 KeyCode code = event.getCode();
-                if(KeyLock==false){
-                if (code == KeyCode.RIGHT || code == KeyCode.D) {
-                    if (PlayerDirection != LEFT) {
-                        PlayerDirection = RIGHT;
-                        KeyLock=true;
-                    }
-                } else if (code == KeyCode.LEFT || code == KeyCode.A) {
-                    if (PlayerDirection != RIGHT) {
-                        PlayerDirection = LEFT;
-                        KeyLock=true;
-                    }
-                } else if (code == KeyCode.UP || code == KeyCode.W) {
-                    if (PlayerDirection != DOWN) {
-                        PlayerDirection = UP;
-                        KeyLock=true;
-                    }
-                } else if (code == KeyCode.DOWN || code == KeyCode.S) {
-                    if (PlayerDirection != UP) {
-                        PlayerDirection = DOWN;
-                        KeyLock=true;
+                if (KeyLock == false) {
+                    if (code == KeyCode.RIGHT || code == KeyCode.D) {
+                        if (PlayerDirection != LEFT) {
+                            PlayerDirection = RIGHT;
+                            KeyLock = true;
+                        }
+                    } else if (code == KeyCode.LEFT || code == KeyCode.A) {
+                        if (PlayerDirection != RIGHT) {
+                            PlayerDirection = LEFT;
+                            KeyLock = true;
+                        }
+                    } else if (code == KeyCode.UP || code == KeyCode.W) {
+                        if (PlayerDirection != DOWN) {
+                            PlayerDirection = UP;
+                            KeyLock = true;
+                        }
+                    } else if (code == KeyCode.DOWN || code == KeyCode.S) {
+                        if (PlayerDirection != UP) {
+                            PlayerDirection = DOWN;
+                            KeyLock = true;
+                        }
                     }
                 }
-            }
             }
         });
 
         Snakes.add(new Snake(3, 0, 0, "/img/Snake_Head.png", "00b0ff", DOWN));
-        Snakes.add(new Snake(3, ROWS-1 , ROWS-1, "/img/Snake_Head_2.png", "ffcc00", UP));
+        Snakes.add(new Snake(3, ROWS - 1, ROWS - 1, "/img/Snake_Head_2.png", "ffcc00", UP));
         PlayerDirection = Snakes.get(0).Direction;
-        MapGenerator.Generate(Walls,2,ROWS);
-        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
-        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
-        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs, ROWS, COLUMNS));
-        Foods.add(new Fruit(Snakes, Foods, Walls,Frogs,ROWS, COLUMNS));
+        MapGenerator.Generate(Walls, 2, ROWS);
+        Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
+        Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
 
         Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
         timeline = new Timeline(new KeyFrame(Duration.millis(170), e -> {
@@ -125,14 +129,17 @@ public class Game implements Game_Interface {
     }
 
 
-
     private void run(GraphicsContext gc) throws InterruptedException, IOException {
+        Thread FrogThread = null;
+        Thread PlayerThread = null;
+        Thread ComputerThread = null;
+        Thread GeneratorThread = null;
         if (Snakes.get(0).gameOver) {
             drawGameOver();
             return;
         }
-        for(int i=1;i<Snakes.size();i++){
-            if(Snakes.get(i).gameOver==true){
+        for (int i = 1; i < Snakes.size(); i++) {
+            if (Snakes.get(i).gameOver == true) {
                 Snakes.remove(i);
             }
         }
@@ -141,20 +148,38 @@ public class Game implements Game_Interface {
         drawWall(gc);
         for (int i = 0; i < Frogs.size(); i++) {
             drawFrog(gc, Frogs.get(i));
-            SumOfOTakenPoints(Frogs.get(i));
-            Frogs.get(i).FrogBestMove(Snakes, AllPoints, ROWS, COLUMNS);
         }
-        drawSnake(gc, Snakes.get(0));
-        Snakes.get(0).MoveSnake(PlayerDirection);
-        KeyLock=false;
-
         for (int i = 1; i < Snakes.size(); i++) {
             drawSnake(gc, Snakes.get(i));
-            Snakes.get(i).SnakeBestMove(Snakes, Foods, Frogs, Walls,ROWS);
-         }
+        }
+        drawSnake(gc, Snakes.get(0));
+
+        for (int i = 0; i < Frogs.size(); i++) {
+            SumOfOTakenPoints(Frogs.get(i));
+            FrogThread objFrog = new FrogThread(Frogs.get(i), Snakes, AllPoints, ROWS, COLUMNS, numb);
+            FrogThread = new Thread(objFrog);
+            FrogThread.start();
+        }
+
+        PlayerSnakeThread objPlayerSnake = new PlayerSnakeThread(Snakes.get(0),PlayerDirection);
+        PlayerThread = new Thread(objPlayerSnake);
+        PlayerThread.start();
+        KeyLock = false;
+
+        for (int i = 1; i < Snakes.size(); i++) {
+            ComSnakeThread objComSnake = new ComSnakeThread(Snakes.get(i),Snakes,Foods,Frogs,Walls,ROWS);
+            ComputerThread = new Thread(objComSnake);
+            ComputerThread.start();
+        }
+
+        FrogThread.join();
+        PlayerThread.join();
+        ComputerThread.join();
+        Scoring(Snakes, Foods, Frogs, Walls);
         drawScore();
-        gameOver(Snakes,Walls);
-        Scoring(Snakes,Foods, Frogs,Walls);
+        gameOver(Snakes, Walls);
+        numb = numb + 1;
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +232,7 @@ public class Game implements Game_Interface {
     }
 
 
-   public void drawSnake(GraphicsContext gc, Snake snake) {
+    public void drawSnake(GraphicsContext gc, Snake snake) {
         Image SnakeHeadImage = new Image(snake.Head);
         gc.save();
         gc.translate((snake.snakeHead.getX() * SQUARE_SIZE) + SQUARE_SIZE / 2, (snake.snakeHead.getY() * SQUARE_SIZE) + SQUARE_SIZE / 2);
@@ -244,7 +269,7 @@ public class Game implements Game_Interface {
         timeline.stop();
         String score = Integer.toString(Snakes.get(0).score);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Scenes/GameOver.fxml"));
-        Parent root  = loader.load();
+        Parent root = loader.load();
         GameOverControl controller = loader.getController();
         controller.setScore(score);
         Scene scene = new Scene(root);
@@ -291,7 +316,7 @@ public class Game implements Game_Interface {
         }
     }
 
-    public static void Scoring(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs,List<Wall> Walls) {
+    public static void Scoring(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls) {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {
@@ -315,7 +340,7 @@ public class Game implements Game_Interface {
         }
     }
 
-    public static void ScoringForAI(List<Snake> Snakes,List<Fruit> Foods,List<Frog> Frogs) {
+    public static void ScoringForAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs) {
         for (int i = 0; i < Snakes.size(); i++) {
             for (int f = 0; f < Foods.size(); f++) {
                 if (Snakes.get(i).snakeHead.getX() == Foods.get(f).Coordinates.getX() && Snakes.get(i).snakeHead.getY() == Foods.get(f).Coordinates.getY()) {

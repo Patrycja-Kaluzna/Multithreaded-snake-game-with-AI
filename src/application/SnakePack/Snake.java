@@ -116,38 +116,55 @@ public class Snake implements Snake_Interface {
     public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int GameSize) {
         int wynik = 0, najWynik = -10000;
         int BestMove = 3;
-        List<Frog> FrogsSave=new ArrayList<>();
         List<Fruit> FoodsSave=new ArrayList();
+        List<Fruit> FoodsSaveTEMP=new ArrayList();
+
+        List<Frog> FrogsSave=new ArrayList<>();
+        List<Frog> FrogsSaveTEMP=new ArrayList<>();
+
+        List<Snake> SnakesTEMP=new ArrayList<>();
         Snake ComSaveSnake = new Snake(Snakes.get(1));
         Snake PlayerSaveSnake = new Snake(Snakes.get(0));
+
+
 
         for (int i = 0; i < Foods.size(); i++) {
             FoodsSave.add(new Fruit(Foods.get(i)));
         }
+        for (int i = 0; i < Foods.size(); i++) {
+            FoodsSaveTEMP.add(new Fruit(Foods.get(i)));
+        }
         for (int i = 0; i < Frogs.size(); i++) {
             FrogsSave.add(new Frog(Frogs.get(i)));
+        }
+        for (int i = 0; i < Frogs.size(); i++) {
+            FrogsSaveTEMP.add(new Frog(Frogs.get(i)));
+        }
+
+        for (int i = 0; i < Snakes.size(); i++) {
+            SnakesTEMP.add( new Snake(Snakes.get(i)));
         }
 
         for (int a = 3; a >= 0; a--) {
 
-            MoveSnake(a);
-            Game.ScoringForAI(Snakes,Foods,Frogs);
-            wynik = SnakeAI(Snakes, Foods, Frogs, Walls, 0, 6, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            SnakesTEMP.get(1).MoveSnake(a);
+            Game.ScoringForAI(SnakesTEMP,FoodsSaveTEMP,FrogsSaveTEMP);
+            wynik = SnakeAI(SnakesTEMP, FoodsSaveTEMP, FrogsSaveTEMP, Walls, 0, 10, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
            // System.out.println(wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;
                 BestMove = a;
             }
 
-            this.CloneSnake(ComSaveSnake);
-            Snakes.get(0).CloneSnake(PlayerSaveSnake);
-            Foods.clear();
+            SnakesTEMP.get(1).CloneSnake(ComSaveSnake);
+            SnakesTEMP.get(0).CloneSnake(PlayerSaveSnake);
+            FoodsSaveTEMP.clear();
             for (int i = 0; i < FoodsSave.size(); i++) {
-                Foods.add(new Fruit(FoodsSave.get(i)));
+                FoodsSaveTEMP.add(new Fruit(FoodsSave.get(i)));
             }
-            Frogs.clear();
+            FrogsSaveTEMP.clear();
             for (int i = 0; i < FrogsSave.size(); i++) {
-                Frogs.add(new Frog(FrogsSave.get(i)));
+                FrogsSaveTEMP.add(new Frog(FrogsSave.get(i)));
             }
         }
        //System.out.println(BestMove+ " TO BEST");
@@ -197,10 +214,10 @@ public class Snake implements Snake_Interface {
                 najWynik = Integer.MIN_VALUE;
                 for (int a = 3; a >= 0 && loop; a--) {
 
-                    MoveSnake(a);
+                    Snakes.get(1).MoveSnake(a);
                     Game.ScoringForAI(Snakes,Foods,Frogs);
                     wynik = SnakeAI(Snakes, Foods, Frogs, Walls, glem + 1, MAXGLEMP,GameSize, alpha, beta, false);
-                    CloneSnake(ComSaveSnake);
+                    Snakes.get(1).CloneSnake(ComSaveSnake);
                     Foods.clear();
                     for (int i = 0; i < FoodsSave.size(); i++) {
                         Foods.add(new Fruit(FoodsSave.get(i)));
@@ -251,7 +268,7 @@ public class Snake implements Snake_Interface {
         } else {
             int Total_distance=0;
             for (int i = 0; i < Foods.size(); i++) {
-                Total_distance+=(int)Math.ceil(Math.hypot(this.snakeHead.getX() - Foods.get(i).Coordinates.getX(), this.snakeHead.getY() - Foods.get(i).Coordinates.getY()));
+                Total_distance+=(int)Math.ceil(Math.hypot( Snakes.get(1).snakeHead.getX() - Foods.get(i).Coordinates.getX(),  Snakes.get(1).snakeHead.getY() - Foods.get(i).Coordinates.getY()));
             }
             return ((Snakes.get(1).score)*10000)-Total_distance;
         }

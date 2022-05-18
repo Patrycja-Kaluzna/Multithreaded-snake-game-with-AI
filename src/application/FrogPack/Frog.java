@@ -116,24 +116,25 @@ public class Frog implements Frog_Interface{
 
         for (int a = 4; a >=0; a--) {
             FREE = true;
-            SAVECOR = (Point) coordinates.clone();
+            SAVECOR = (Point) this.coordinates.clone();
             MoveFrog(a);
             for (Point occupiedField : OccupiedFields) {
-                if (occupiedField.getX() == coordinates.getX() && occupiedField.getY() == coordinates.getY()) {
+                if (occupiedField.getX() ==this.coordinates.getX() && occupiedField.getY() == this.coordinates.getY()) {
                     FREE = false;
                 }
             }
 
-            if (FREE && coordinates.getX() >= 0 && coordinates.getX() < COLUMNS && coordinates.getY() >= 0 && coordinates.getY() < ROWS) {
+            if (FREE && this.coordinates.getX() >= 0 && this.coordinates.getX() < COLUMNS && this.coordinates.getY() >= 0 && this.coordinates.getY() < ROWS) {
                 wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 6);
                 if (wynik > najWynik) {
                     najWynik = wynik;
                     BestMove = a;
                 }
             }
-            coordinates = SAVECOR;
+            this.coordinates = SAVECOR;
         }
         MoveFrog(BestMove);
+        System.out.println(this.coordinates);
         if (BestMove == 4) {
             Direction = SAVEDIR;
         }
