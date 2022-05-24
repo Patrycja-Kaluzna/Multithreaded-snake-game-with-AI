@@ -149,7 +149,7 @@ public class Snake implements Snake_Interface {
 
             SnakesTEMP.get(1).MoveSnake(a);
             Game.ScoringForAI(SnakesTEMP,FoodsSaveTEMP,FrogsSaveTEMP);
-            wynik = SnakeAI(SnakesTEMP, FoodsSaveTEMP, FrogsSaveTEMP, Walls, 0, 13, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            wynik = SnakeAI(SnakesTEMP, FoodsSaveTEMP, FrogsSaveTEMP, Walls, 0, 10, GameSize, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
            // System.out.println(wynik);
             if (wynik > najWynik) {
                 najWynik = wynik;

@@ -115,7 +115,7 @@ public class Game implements Game_Interface {
         Foods.add(new Fruit(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
 
         Frogs.add(new Frog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS));
-        timeline = new Timeline(new KeyFrame(Duration.millis(170), e -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(150), e -> {
             try {
                 run(gc);
             } catch (InterruptedException ex) {

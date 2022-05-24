@@ -134,7 +134,7 @@ public class Frog implements Frog_Interface{
             this.coordinates = SAVECOR;
         }
         MoveFrog(BestMove);
-
+        System.out.println(this.coordinates);
         if (BestMove == 4) {
             Direction = SAVEDIR;
         }
@@ -178,7 +178,7 @@ public class Frog implements Frog_Interface{
             }
             TotalDistance+= pom;
         }
-        TotalDistance=TotalDistance*minDistance;
+        TotalDistance=TotalDistance*(minDistance+1);
         //return Math.hypot(Snakes.get(0).snakeHead.getX() - coordinates.getX(), Snakes.get(0).snakeHead.getY() - coordinates.getY());
         return  TotalDistance;
     }
