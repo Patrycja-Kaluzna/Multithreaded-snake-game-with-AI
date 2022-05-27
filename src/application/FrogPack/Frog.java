@@ -6,6 +6,7 @@ import application.WallPack.Wall;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -18,6 +19,7 @@ public class Frog implements Frog_Interface{
     public int Direction = 2;
     public Image frogImage = new Image("/img/frog.png");
     public Point coordinates = new Point(0, 0);
+    private List<Snake> SnakesTEMP=new ArrayList<>();
 
     public Frog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
         GenerateFrog(Snakes, Foods, Walls, Frogs, ROWS, COLUMNS);
@@ -30,6 +32,10 @@ public class Frog implements Frog_Interface{
     public Frog(Frog frog) {
         this.coordinates=(Point) frog.coordinates.clone();
         this.Direction= frog.Direction;
+    }
+    public Frog(Point Coordinates, int direction) {
+        this.coordinates= (Point) Coordinates.clone();
+        this.Direction= direction;
     }
 
     public void GenerateFrog(List<Snake> Snakes, List<Fruit> Foods, List<Wall> Walls, List<Frog> Frogs, int ROWS, int COLUMNS) {
@@ -113,67 +119,70 @@ public class Frog implements Frog_Interface{
         int BestMove = 4;
         Point SAVECOR;
         int SAVEDIR = Direction;
-
+        SnakesTEMP.clear();
+        for (int i = 0; i < Snakes.size(); i++) {
+            SnakesTEMP.add( new Snake(Snakes.get(i)));
+        }
+        Frog SaveFrog = new Frog(this.coordinates,this.Direction);
         barrier.await();
         for (int a = 4; a >=0; a--) {
             FREE = true;
-            SAVECOR = (Point) this.coordinates.clone();
-            MoveFrog(a);
+            SAVECOR = (Point) SaveFrog.coordinates.clone();
+            SaveFrog.MoveFrog(a);
             for (Point occupiedField : OccupiedFields) {
-                if (occupiedField.getX() ==this.coordinates.getX() && occupiedField.getY() == this.coordinates.getY()) {
+                if (occupiedField.getX() ==SaveFrog.coordinates.getX() && occupiedField.getY() == SaveFrog.coordinates.getY()) {
                     FREE = false;
                 }
             }
 
-            if (FREE && this.coordinates.getX() >= 0 && this.coordinates.getX() < COLUMNS && this.coordinates.getY() >= 0 && this.coordinates.getY() < ROWS) {
-                wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, 0, 4);
+            if (FREE && SaveFrog.coordinates.getX() >= 0 && SaveFrog.coordinates.getX() < COLUMNS && SaveFrog.coordinates.getY() >= 0 && SaveFrog.coordinates.getY() < ROWS) {
+                wynik = FrogAI(SaveFrog, OccupiedFields, ROWS, COLUMNS, 0, 4);
                 if (wynik > najWynik) {
                     najWynik = wynik;
                     BestMove = a;
                 }
             }
-            this.coordinates = SAVECOR;
+            SaveFrog.coordinates = SAVECOR;
         }
         MoveFrog(BestMove);
-        System.out.println(this.coordinates);
+        System.out.println(SaveFrog.coordinates);
         if (BestMove == 4) {
             Direction = SAVEDIR;
         }
     }
 
-    public double FrogAI(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS, int glem, int MAXGLEMP) {
+    public double FrogAI(Frog SaveFrog, List<Point> OccupiedFields, int ROWS, int COLUMNS, int glem, int MAXGLEMP) {
         double wynik = 0;
         double najWynik = -10000;
         boolean FREE;
         Point SAVECOR;
-        int SAVEDIR = Direction;
         if (glem < MAXGLEMP) {
             najWynik = -10000;
             for (int a = 4; a >= 0; a--) {
                 FREE = true;
-                SAVECOR = (Point) coordinates.clone();
-                MoveFrog(a);
+                SAVECOR = (Point) SaveFrog.coordinates.clone();
+                SaveFrog.MoveFrog(a);
                 for (Point occupiedField : OccupiedFields) {
-                    if (occupiedField.getX() == coordinates.getX() && occupiedField.getY() == coordinates.getY()) {
+                    if (occupiedField.getX() == SaveFrog.coordinates.getX() && occupiedField.getY() == SaveFrog.coordinates.getY()) {
                         FREE = false;
                     }
                 }
 
-                if (FREE && coordinates.getX() >= 0 && coordinates.getX() < COLUMNS && coordinates.getY() >= 0 && coordinates.getY() < ROWS) {
-                    wynik = FrogAI(Snakes, OccupiedFields, ROWS, COLUMNS, (glem+1), MAXGLEMP);
+                if (FREE && SaveFrog.coordinates.getX() >= 0 && SaveFrog.coordinates.getX() < COLUMNS && SaveFrog.coordinates.getY() >= 0 && SaveFrog.coordinates.getY() < ROWS) {
+                    wynik = FrogAI(SaveFrog, OccupiedFields, ROWS, COLUMNS, (glem+1), MAXGLEMP);
                     if (wynik > najWynik) {
                         najWynik = wynik;
                     }
                 }
-                coordinates = SAVECOR;
+                SaveFrog.coordinates = SAVECOR;
             }
             return najWynik;
         }
         int TotalDistance=0;
         int minDistance=1000000000;
         int pom;
-        for(int i=0; i<Snakes.size();i++){
-            pom=(int)Math.round( Math.hypot(Snakes.get(i).snakeHead.getX() - coordinates.getX(), Snakes.get(i).snakeHead.getY() - coordinates.getY()));
+        for(int i=0; i<SnakesTEMP.size();i++){
+            pom=(int)Math.round( Math.hypot(SnakesTEMP.get(i).snakeHead.getX() - SaveFrog.coordinates.getX(), SnakesTEMP.get(i).snakeHead.getY() - SaveFrog.coordinates.getY()));
             if(minDistance>pom){
                 minDistance=pom;
             }

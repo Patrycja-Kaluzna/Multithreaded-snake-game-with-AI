@@ -20,5 +20,5 @@ public interface Frog_Interface {
 
     void moveDown();
     void FrogBestMove(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS, CyclicBarrier barrier) throws BrokenBarrierException, InterruptedException;
-   double FrogAI(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS, int glem, int MAXGLEMP);
+    double FrogAI(Frog SaveFrog, List<Point> OccupiedFields, int ROWS, int COLUMNS, int glem, int MAXGLEMP);
 }

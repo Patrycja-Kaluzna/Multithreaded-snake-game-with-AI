@@ -54,7 +54,7 @@ public class Snake implements Snake_Interface {
         Direction = direction;
     }
 
-    Snake(Snake snake){
+    public Snake(Snake snake){
         this.Direction=snake.Direction;
         this.gameOver= snake.gameOver;
         this.Color=snake.Color;
