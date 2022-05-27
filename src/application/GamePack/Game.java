@@ -32,6 +32,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 //test test test test
 
@@ -58,6 +59,7 @@ public class Game implements Game_Interface {
     private List<Point> AllPoints = new ArrayList<>();
     private Stage PrimStage;
     private Timeline timeline;
+    CyclicBarrier barrier = new CyclicBarrier(3);
 
 
     public void Game_Start(Stage primaryStage, double size) {
@@ -157,18 +159,18 @@ public class Game implements Game_Interface {
 
         for (int i = 0; i < Frogs.size(); i++) {
             SumOfOTakenPoints(Frogs.get(i));
-            FrogThread objFrog = new FrogThread(Frogs.get(i), Snakes, AllPoints, ROWS, COLUMNS);
+            FrogThread objFrog = new FrogThread(Frogs.get(i), Snakes, AllPoints, ROWS, COLUMNS, barrier);
             FrogThread = new Thread(objFrog);
             FrogThread.start();
         }
 
-        PlayerSnakeThread objPlayerSnake = new PlayerSnakeThread(Snakes.get(0),PlayerDirection);
+        PlayerSnakeThread objPlayerSnake = new PlayerSnakeThread(Snakes.get(0),PlayerDirection, barrier);
         PlayerThread = new Thread(objPlayerSnake);
         PlayerThread.start();
         KeyLock = false;
 
         for (int i = 1; i < Snakes.size(); i++) {
-            ComSnakeThread objComSnake = new ComSnakeThread(Snakes.get(i),Snakes,Foods,Frogs,Walls,ROWS);
+            ComSnakeThread objComSnake = new ComSnakeThread(Snakes.get(i),Snakes,Foods,Frogs,Walls,ROWS,barrier);
             ComputerThread = new Thread(objComSnake);
             ComputerThread.start();
         }

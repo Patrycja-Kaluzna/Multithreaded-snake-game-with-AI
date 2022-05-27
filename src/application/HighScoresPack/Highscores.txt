@@ -3,4 +3,7 @@ Bartek 450
 Guma 300
 Ala 90
 assek 80
+a 20
+a 15
+g 5
 v 0

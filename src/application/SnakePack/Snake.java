@@ -8,6 +8,8 @@ import application.WallPack.Wall;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class Snake implements Snake_Interface {
     private static final int RIGHT = 0;
@@ -113,7 +115,7 @@ public class Snake implements Snake_Interface {
         snakeBody.add(new Point(-1, -1));
     }
 
-    public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int GameSize) {
+    public void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int GameSize, CyclicBarrier barrier) throws BrokenBarrierException, InterruptedException {
         int wynik = 0, najWynik = -10000;
         int BestMove = 3;
         List<Fruit> FoodsSave=new ArrayList();
@@ -144,7 +146,7 @@ public class Snake implements Snake_Interface {
         for (int i = 0; i < Snakes.size(); i++) {
             SnakesTEMP.add( new Snake(Snakes.get(i)));
         }
-
+        barrier.await();
         for (int a = 3; a >= 0; a--) {
 
             SnakesTEMP.get(1).MoveSnake(a);

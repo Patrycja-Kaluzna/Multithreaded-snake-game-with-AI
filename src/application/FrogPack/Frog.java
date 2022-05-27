@@ -7,7 +7,8 @@ import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.List;
-
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 public class Frog implements Frog_Interface{
     private static final int RIGHT = 0;
     private static final int LEFT = 1;
@@ -106,14 +107,14 @@ public class Frog implements Frog_Interface{
     }
 
 
-    public void FrogBestMove(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS) {
+    public void FrogBestMove(List<Snake> Snakes, List<Point> OccupiedFields, int ROWS, int COLUMNS,CyclicBarrier barrier) throws BrokenBarrierException, InterruptedException {
         double wynik = 0, najWynik = -10000;
         boolean FREE;
         int BestMove = 4;
         Point SAVECOR;
         int SAVEDIR = Direction;
 
-
+        barrier.await();
         for (int a = 4; a >=0; a--) {
             FREE = true;
             SAVECOR = (Point) this.coordinates.clone();

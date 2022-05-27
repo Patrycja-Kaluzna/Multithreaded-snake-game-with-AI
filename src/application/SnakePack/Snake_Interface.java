@@ -5,6 +5,8 @@ import application.FruitPack.Fruit;
 import application.WallPack.Wall;
 
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public interface Snake_Interface {
     void CloneSnake(Snake snake);
@@ -20,6 +22,6 @@ public interface Snake_Interface {
     void moveDown();
 
     void Eat();
-    void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int GameSize);
+    void SnakeBestMove(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int GameSize, CyclicBarrier barrier) throws BrokenBarrierException, InterruptedException;
     int SnakeAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls, int glem, int MAXGLEMP,int GameSize, int alpha, int beta, boolean toKomp);
 }
