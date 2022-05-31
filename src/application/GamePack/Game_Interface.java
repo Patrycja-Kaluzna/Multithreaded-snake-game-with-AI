@@ -1,29 +1,67 @@
 package application.GamePack;
 
-import application.FrogPack.Frog;
-import application.FruitPack.Fruit;
-import application.SnakePack.Snake;
 import javafx.scene.canvas.GraphicsContext;
+import application.SnakePack.Snake;
+import application.FrogPack.Frog;
+import java.io.IOException;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.List;
-
+/**
+ *
+ */
 public interface Game_Interface {
+
+    /**
+     *
+     * @param primaryStage
+     * @param size
+     */
     void Game_Start(Stage primaryStage, double size);
+    /**
+     *
+     * @param gc
+     */
     void drawBackground(GraphicsContext gc);
+    /**
+     *
+     * @param gc
+     */
     void drawFood(GraphicsContext gc);
+    /**
+     *
+     * @param gc
+     */
     void drawWall(GraphicsContext gc);
-    static void drawFrog(GraphicsContext gc, Frog frog){
-
-    }
-
-    static void drawSnake(GraphicsContext gc, Snake snake) {
-
-    }
-
+    /**
+     *
+     * @param gc
+     * @param frog
+     */
+    static void drawFrog(GraphicsContext gc, Frog frog) {}
+    /**
+     *
+     * @param gc
+     * @param snake
+     */
+    static void drawSnake(GraphicsContext gc, Snake snake) {}
+    /**
+     *
+     */
     void drawScore();
+    /**
+     *
+     * @throws InterruptedException
+     * @throws IOException
+     */
     void drawGameOver()throws InterruptedException, IOException;
+    /**
+     *
+     */
     void SumOfOTakenPoints();
+    /**
+     *
+     * @param WithOutThis
+     */
     void SumOfOTakenPoints(Frog WithOutThis);
+
 }
