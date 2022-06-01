@@ -1,23 +1,44 @@
 package application.SnakePack;
 
-import application.FrogPack.Frog;
-
-import java.awt.*;
-import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+/**
+ * Klasa watku sterujacego wezem.
+ */
 public class PlayerSnakeThread implements Runnable {
+
+    /**
+     * Waz
+     */
     private Snake snake;
+    /**
+     * Aktualny kierunek ruchu
+     */
     private int Direction;
+    /**
+     * Bariera synchronizujaca watki
+     */
     CyclicBarrier barrier;
-    public PlayerSnakeThread(Snake Snake,int Dir, CyclicBarrier Barrier){
-       this.snake=Snake;
-       this.Direction=Dir;
-       this.barrier=Barrier;
+
+    /**
+     * Inicjalizuje caly obiekt podanymi
+     * wartosciami przy tworzeniu.
+     *
+     * @param Snake Waz
+     * @param Dir Aktualny kierunek ruchu
+     * @param Barrier Bariera synchornizujaca watki
+     */
+    public PlayerSnakeThread(Snake Snake, int Dir, CyclicBarrier Barrier) {
+       this.snake = Snake;
+       this.Direction = Dir;
+       this.barrier = Barrier;
     }
 
-    public void run(){
+    /**
+     * Uruchamia watek sterujacy wezem.
+     */
+    public void run() {
         try {
             barrier.await();
         } catch (InterruptedException e) {

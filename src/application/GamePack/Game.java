@@ -58,7 +58,7 @@ public class Game implements Game_Interface {
      */
     private static final int COLUMNS = ROWS;
     /**
-     * Rozmiar planszy
+     * Rozmiar pola planszy
      */
     private static double SQUARE_SIZE = WIDTH / ROWS;
     /**
@@ -124,13 +124,17 @@ public class Game implements Game_Interface {
 
 
     /**
+     * Rozpoczyna gre o podanym rozmiarze planszy.
+     * Inicjalizuje scene, generauje mape, a w
+     * tym sciany, generuje owoce, weze i zabe
+     * oraz obsluguje sterowanie wezem przy
+     * pomocy klawiatury.
      *
-     *
-     * @param primaryStage
-     * @param size
+     * @param primaryStage  Scena
+     * @param size Rozmiar planszy
      */
     public void Game_Start(Stage primaryStage, double size) {
-        // Inicjalizacja Sceny
+        // Inicjalizacja sceny
         WIDTH = (int) size;
         HEIGHT = WIDTH;
         SQUARE_SIZE = WIDTH / ROWS;
@@ -143,7 +147,7 @@ public class Game implements Game_Interface {
         primaryStage.show();
         gc = canvas.getGraphicsContext2D();
 
-        // Obsluga kalwiatury
+        // Obsluga klawiatury
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -197,11 +201,11 @@ public class Game implements Game_Interface {
     }
 
     /**
+     * Uruchamia watki oraz rysuje tlo,
+     * sciany, punkty, owoce, weze i
+     * zabe, a takze koniec gry.
      *
-     *
-     * @param gc
-     * @throws InterruptedException
-     * @throws IOException
+     * @param gc Kontekst graficzny
      */
     private void run(GraphicsContext gc) throws InterruptedException, IOException {
         Thread FrogThread = null;
@@ -358,10 +362,7 @@ public class Game implements Game_Interface {
     }
 
     /**
-     *
-     *
-     * @throws InterruptedException
-     * @throws IOException
+     * Rysuje koniec gry.
      */
     public void drawGameOver() throws InterruptedException, IOException {
         TimeUnit.MILLISECONDS.sleep(500);
@@ -377,27 +378,33 @@ public class Game implements Game_Interface {
     }
 
     /**
+     * Konczy gre. Sprawdza wystapienia wszystkich
+     * sytuacji konczacych gre, czyli wypelzniecia
+     * weza poza plansze, zjedzenia weza przez
+     * siebie samego i przez innego weza, a
+     * takze uderzenie weza w sciane.
      *
-     *
-     * @param Snakes
-     * @param Walls
+     * @param Snakes Lista wezy na planszy
+     * @param Walls Lista scian na planszy
      */
     public static void gameOver(List<Snake> Snakes, List<Wall> Walls) {
-        //Snake is out of the bound
+        // Waz wypelzl poza plansze
         for (int a = 0; a < Snakes.size(); a++) {
             if (Snakes.get(a).snakeHead.x < 0 || Snakes.get(a).snakeHead.y < 0 || Snakes.get(a).snakeHead.x * SQUARE_SIZE >= WIDTH || Snakes.get(a).snakeHead.y * SQUARE_SIZE >= HEIGHT) {
                 Snakes.get(a).gameOver = true;
             }
-            // destroy itself
+
+            // Waz zjadl samego siebie
             for (int i = 1; i < Snakes.get(a).snakeBody.size(); i++) {
                 if (Snakes.get(a).snakeHead.x == Snakes.get(a).snakeBody.get(i).getX() && Snakes.get(a).snakeHead.getY() == Snakes.get(a).snakeBody.get(i).getY()) {
                     Snakes.get(a).gameOver = true;
                     break;
                 }
             }
-            // Killed by other snake
+
+            // Waz zostal zjedzony przez weza
             for (int b = 0; b < Snakes.size(); b++) {
-                // It is not the same snake
+                // Ale nie przez samego siebie
                 if (a != b) {
                     for (int c = 0; c < Snakes.get(b).snakeBody.size(); c++) {
                         if (Snakes.get(a).snakeHead.x == Snakes.get(b).snakeBody.get(c).getX() && Snakes.get(a).snakeHead.getY() == Snakes.get(b).snakeBody.get(c).getY()) {
@@ -407,7 +414,8 @@ public class Game implements Game_Interface {
                     }
                 }
             }
-            // Smash Wall
+
+            // Waz uderzyl w sciane
             for (int d = 0; d < Walls.size(); d++) {
                 for (int e = 0; e < Walls.get(d).segments.size(); e++) {
                     if (Snakes.get(a).snakeHead.x == Walls.get(d).segments.get(e).getX() && Snakes.get(a).snakeHead.y == Walls.get(d).segments.get(e).getY()) {
@@ -420,13 +428,15 @@ public class Game implements Game_Interface {
     }
 
     /**
+     * Dodaje punkty za zjedzenie owocu lub zaby.
+     * W przypadku zjedzenia owocu uruchamia
+     * watek, ktory je generuje, a w przypadku
+     * zjedzenia zaby dodaje nowa zabe.
      *
-     *
-     * @param Snakes
-     * @param Foods
-     * @param Frogs
-     * @param Walls
-     * @throws InterruptedException
+     * @param Snakes Lista wezy na planszy
+     * @param Foods Lista owocow na planszy
+     * @param Frogs Lista zab na planszy
+     * @param Walls Lista scian na planszy
      */
     public static void Scoring(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs, List<Wall> Walls) throws InterruptedException {
         Thread ThreadF = null;
@@ -461,9 +471,9 @@ public class Game implements Game_Interface {
     /**
      *
      *
-     * @param Snakes
-     * @param Foods
-     * @param Frogs
+     * @param Snakes Lista wezy na planszy
+     * @param Foods Lista owocow na planszy
+     * @param Frogs Lista zab na planszy
      */
     public static void ScoringForAI(List<Snake> Snakes, List<Fruit> Foods, List<Frog> Frogs) {
         for (int i = 0; i < Snakes.size(); i++) {
@@ -486,15 +496,15 @@ public class Game implements Game_Interface {
     }
 
     /**
-     *
+     * Dodaje wszystkie zajete pola planszy do listy.
      */
     public void SumOfOTakenPoints() {
         AllPoints.clear();
         for (Fruit food : Foods) {
             AllPoints.add(food.Coordinates);
         }
-        for (Frog forg : Frogs) {
-            AllPoints.add(forg.coordinates);
+        for (Frog frog : Frogs) {
+            AllPoints.add(frog.coordinates);
         }
         for (Snake snake : Snakes) {
             AllPoints.addAll(snake.snakeBody);
@@ -505,9 +515,10 @@ public class Game implements Game_Interface {
     }
 
     /**
+     * Dodaje wszystkie zajete pola planszy do listy
+     * z wyjatkiem pola zajetego przez podana zabe.
      *
-     *
-     * @param WithOutThis
+     * @param WithOutThis Zaba, ktorej zajmowane pole jest wykluczone
      */
     public void SumOfOTakenPoints(Frog WithOutThis) {
         AllPoints.clear();
