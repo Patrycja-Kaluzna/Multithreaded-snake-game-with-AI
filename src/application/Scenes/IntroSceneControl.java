@@ -18,11 +18,7 @@ import javafx.fxml.FXML;
  */
 public class IntroSceneControl {
 
-    /**
-     *
-     */
-    @FXML
-    public static AnchorPane IntroSceneParent;
+
     /**
      * Przycisk EXIT
      */
