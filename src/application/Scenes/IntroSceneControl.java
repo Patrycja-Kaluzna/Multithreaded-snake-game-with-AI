@@ -18,7 +18,6 @@ import javafx.fxml.FXML;
  */
 public class IntroSceneControl {
 
-
     /**
      * Przycisk EXIT
      */
