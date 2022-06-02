@@ -86,7 +86,7 @@ public class Game implements Game_Interface {
      */
     private int PlayerDirection;
     /**
-     *
+     * Zmienna pomocnicza do blokowania klawiatury,zapobiega wielokrotnym zmianom kierunku w czasie trwania klatki
      */
     private boolean KeyLock = false;
     /**
@@ -110,11 +110,12 @@ public class Game implements Game_Interface {
      */
     private List<Point> AllPoints = new ArrayList<>();
     /**
-     *
+     * Zmienna globalna przechowująca obecnie wyświetlaną scenę, pomocna podczas zmiany Sceny na game over
      */
     private Stage PrimStage;
     /**
-     *
+     * Zmienna pozwalająca określić co ile ma być wyświetlana kolejna klatka,
+     * inaczej mówiąc kiedy ponownie ma zostać uruchomiona cała sekwencja rysowania oraz logiki gry
      */
     private Timeline timeline;
     /**
