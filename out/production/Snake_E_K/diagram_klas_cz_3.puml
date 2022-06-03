@@ -1,0 +1,120 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+package "application" {
+
+package "application.FrogPack" {
+
+interface Frog_Interface {
+    ~ FrogClone(frog: Frog): void
+    ~ GenerateFrog(Snakes: List<Snake>, Foods: List<Fruit>, Walls: List<Wall>, Frogs: List<Frog>, ROWS: int, COLUMNS: int): void
+    ~ MoveFrog(chosenDirection: int): void
+    ~ moveRight(): void
+    ~ moveLeft(): void
+    ~ moveUp(): void
+    ~ moveDown(): void
+    ~ FrogBestMove(Snakes: List<Snake>, OccupiedFields: List<Point>, ROWS: int, COLUMNS: int, barrier: CyclicBarrier): void
+    ~ FrogAI(SaveFrog: Frog, OccupiedFields: List<Point>, ROWS: int, COLUMNS: int, glem: int, MAXGLEMP: int): double
+}
+
+class Frog {
+    - {static} RIGHT: int = 0
+    - {static} LEFT: int = 1
+    - {static} UP: int = 2
+    - {static} DOWN: int = 3
+    - {static} STOP: int = 4
+    {field} - SnakesTEMP: List<Snake> = new ArrayList<>()
+    + Direction: int = 2
+    {field} + frogImage: Image = new Image("/img/frog.png")
+    {field} + coordinates: Point  = new Point(0, 0)
+    --
+    + Frog(Snakes: List<Snake>, Foods: List<Fruit>, Walls: List<Wall>, Frogs: List<Frog>, ROWS: int, COLUMNS: int)
+    + void FrogClone(frog: Frog)
+    + Frog(frog: Frog)
+    + Frog(Coordinates: Point, direction: int)
+    + GenerateFrog(Snakes: List<Snake>, Foods: List<Fruit>, Walls: List<Wall>, Frogs: List<Frog>, ROWS: int, COLUMNS: int): void
+    + MoveFrog(chosenDirection: int): void
+    + moveRight(): void
+    + moveLeft(): void
+    + moveUp(): void
+    + moveDown(): void
+    + FrogBestMove(Snakes: List<Snake>, OccupiedFields: List<Point>, ROWS: int, COLUMNS: int, barrier: CyclicBarrier): void
+    + FrogAI(SaveFrog: Frog, OccupiedFields: List<Point>, ROWS: int, COLUMNS: int, glem: int, MAXGLEMP: int): double
+}
+
+}
+
+Frog_Interface <|.. Frog
+
+package "application.FruitPack" {
+
+class Fruit_Interface {
+    ~ Generate(Snakes: List<Snake>, Foods: List<Fruit>, Walls: List<Wall>, Frogs: List<Frog>, ROWS: int, COLUMNS: int): void
+}
+
+class Fruit {
+    - {static} FOODS_IMAGE: String[] = new String[] {"/img/ic_orange.png", "/img/ic_apple.png", "/img/ic_cherry.png",
+                                                                     "/img/ic_berry.png", "/img/ic_coconut_.png", "/img/ic_peach.png",
+                                                                     "/img/ic_watermelon.png", "/img/ic_orange.png", "/img/ic_pomegranate.png"}
+    + fruitImage: Image
+    {field} + Coordinates: Point = new Point(0, 0)
+    --
+    + Fruit(Snakes: List<Snake>, Foods: List<Fruit>, Walls: List<Wall>, Frogs: List<Frog>, ROWS: int, COLUMNS: int)
+    + Fruit(fruit: Fruit )
+    + Generate(Snakes: List<Snake>, Foods: List<Fruit>, Walls: List<Wall>, Frogs: List<Frog>, ROWS: int, COLUMNS: int): void
+}
+
+}
+
+Fruit_Interface <|.. Fruit
+
+package "application.SnakePack" {
+
+class Snake_Interface {
+    ~ CloneSnake(snake: Snake): void
+    ~ MoveSnake(chosenDirection: int): void
+    ~ moveRight(): void
+    ~ moveLeft(): void
+    ~ moveUp(): void
+    ~ moveDown(): void
+    ~ Eat(): void
+    ~ SnakeBestMove(Snakes: List<Snake>, Foods: List<Fruit>, Frogs: List<Frog>, Walls: List<Wall>, GameSize: int, barrier: CyclicBarrier): void
+    ~ SnakeAI(Snakes: List<Snake>, Foods: List<Fruit>, Frogs: List<Frog>, Walls: List<Wall>, glem: int, MAXGLEMP: int, alpha: int, beta: int, toKomp: boolean): int
+}
+
+class Snake {
+    - {static} RIGHT: int = 0
+    - {static} LEFT: int = 1
+    - {static} UP: int = 2
+    - {static} DOWN: int = 3
+    + snakeHead: Point = null
+    + Direction: int = 0
+    + score: int = 0
+    + Head: String = null
+    + Color: String = null
+    + gameOver: boolean = false
+    {field} + snakeBody: List<Point> = new ArrayList()
+    --
+    + CloneSnake(snake: Snake): void
+    + Snake(LenghtOfSnake: int, StartXpos: int, StartYpos: int, head: String, color: String, direction: int)
+    + Snake(snake: Snake)
+    + MoveSnake(chosenDirection: int): void
+    + moveRight(): void
+    + moveLeft(): void
+    + moveUp(): void
+    + moveDown(): void
+    + Eat(): void
+    + SnakeBestMove(Snakes: List<Snake>, Foods: List<Fruit>, Frogs: List<Frog>, Walls: List<Wall>, GameSize: int, barrier: CyclicBarrier): void
+    + SnakeAI(Snakes: List<Snake>, Foods: List<Fruit>, Frogs: List<Frog>, Walls: List<Wall>, glem: int, MAXGLEMP: int, alpha: int, beta: int, toKomp: boolean): int
+}
+
+}
+
+Snake_Interface <|.. Snake
+
+Snake --* Frog
+
+}
+
+@enduml

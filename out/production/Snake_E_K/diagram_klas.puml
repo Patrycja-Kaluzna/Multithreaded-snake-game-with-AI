@@ -1,0 +1,141 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+package "application" {
+
+package "application.GamePack" {
+    class Game_Interface {
+        ~ Game_Start(primaryStage: Stage, size: double): void
+        ~ drawBackground(gc: GraphicsContext): void
+        ~ drawFood(gc: GraphicsContext): void
+        ~ drawWall(gc: GraphicsContext): void
+        ~ {static} drawFrog(gc: GraphicsContext, frog: Frog): void
+        ~ {static} drawSnake(gc: GraphicsContext, snake: Snake): void
+        ~ drawScore(): void
+        ~ drawGameOver(): void
+        ~ SumOfOTakenPoints(): void
+        ~ SumOfOTakenPoints(Frog WithOutThis): void
+    }
+
+    class Game {
+        ~ barrier: CyclicBarrier = new CyclicBarrier(3)
+        - {static} ROWS: int = 21
+        - {static} COLUMNS: int = ROWS
+        - {static} SQUARE_SIZE: double  = WIDTH / ROWS
+        - {static} RIGHT: int = 0
+        - {static} LEFT: int = 1
+        - {static} UP: int = 2
+        - {static} DOWN: int = 3
+        - gc: GraphicsContext
+        - PlayerDirection: int
+        - KeyLock: boolean = false
+        - PrimStage: Stage
+        - timeline: Timeline
+        {field} - Snakes: List<Snake> = new ArrayList()
+        {field} - Foods: List<Fruit> = new ArrayList<>()
+        {field} - Frogs: List<Frog> = new ArrayList<>()
+        {field} - Walls: List<Wall> = new ArrayList<>()
+        {field} - AllPoints: List<Point> = new ArrayList<>()
+        + {static} WIDTH: double = 800
+        + {static} HEIGHT: double = WIDTH
+        --
+        - run(gc: GraphicsContext): void
+        + Game_Start(primaryStage: Stage, size: double): void
+        + drawBackground(gc: GraphicsContext): void
+        + drawFood(gc: GraphicsContext): void
+        + drawWall(gc: GraphicsContext): void
+        + {static} drawFrog(gc: GraphicsContext, frog: Frog): void
+        + {static} drawSnake(gc: GraphicsContext, snake: Snake): void
+        + drawScore(): void
+        + drawGameOver(): void
+        + {static} gameOver(Snakes: List<Snake>, Walls: List<Wall>): void
+        + {static} Scoring(Snakes: List<Snake>, Foods: List<Fruit>, Frogs: List<Frog>, Walls: List<Wall>): void
+        + {static} ScoringForAI(Snakes: List<Snake>, Foods: List<Fruit>, Frogs: List<Frog>): void
+        + SumOfOTakenPoints(): void
+        + SumOfOTakenPoints(WithOutThis: Frog): void
+    }
+
+    class MapGenerator {
+        ~ {static} Generate(Walls: List<Wall>, number_of_walls: int, map_size: int): void
+    }
+}
+
+package "application.WallPack" {
+
+class Wall_Interface {
+    ~ GenerateWall(TypeOfWall: int, Start: Point, End: Point): void
+}
+
+class Wall {
+    + {static} WALL_IMAGE: String = "/img/wall.png"
+    {field} + segments: List<Point> = new ArrayList<>()
+    --
+    + Wall(TypeOfWall: int, Start: Point, End: Point)
+    + GenerateWall(TypeOfWall: int, Start: Point, End: Point): void
+    + GenerateWall(Point point): void
+}
+
+}
+
+package "application.Scenes" {
+
+class GameOverControl {
+    - SCORE: Text
+    - NAMEBOX: TextField
+    - MENU: Button
+    - TRY_AGAIN: Button
+    {field} - scores: List<Scores> = new ArrayList()
+    --
+    + initialize(): void
+    + MENU_click(actionEvent: ActionEvent): void
+    + TRY_AGAIN_click(actionEvent: ActionEvent): void
+    + setScore(score: String): void
+    + SaveScore(): void
+}
+
+class HighscoresControl {
+    - Player1: Text
+    - Player2: Text
+    - Player3: Text
+    - Player4: Text
+    - Player5: Text
+
+    + initialize(): void
+    + EXIT_Highscores(actionEvent: ActionEvent): void
+}
+
+class IntroSceneControl {
+    - EXIT_Button: Button
+
+    + game_click(actionEvent: ActionEvent): void
+    + EXIT(actionEvent: ActionEvent): void
+    + Highscores_click(actionEvent: ActionEvent): void
+}
+
+}
+
+class Comparable<Scores> {
+}
+
+class Scores {
+    + name: String = ""
+    + score: int = 0
+
+    + Scores(Name: String, Score: int)
+    + compareTo(s: Scores): int
+}
+
+Game_Interface <|.. Game
+
+Comparable <|.. Scores
+
+Wall_Interface <|.. Wall
+
+Scores --* GameOverControl
+
+Wall --* Game
+
+}
+
+@enduml
