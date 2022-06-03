@@ -113,6 +113,8 @@ class Snake {
 
 Snake_Interface <|.. Snake
 
+Snake --* Frog
+
 }
 
 @enduml
