@@ -64,7 +64,7 @@ public interface Game_Interface {
     /**
      * Rysuje koniec gry.
      */
-    void drawGameOver()throws InterruptedException, IOException;
+    void drawGameOver() throws InterruptedException, IOException;
     /**
      * Dodaje wszystkie zajete pola planszy do listy.
      */

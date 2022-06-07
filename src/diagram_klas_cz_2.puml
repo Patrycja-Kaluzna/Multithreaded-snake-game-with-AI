@@ -1,0 +1,79 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+class Runnable {
+}
+
+package "application" {
+
+package "application.FrogPack" {
+
+class FrogThread {
+    ~ ROWS: int
+    ~ COLUMNS: int
+    ~ barrier: CyclicBarrier
+    - frog: Frog
+    - Snakes: List <Snake>
+    - AllPoints: List<Point>
+
+    + FrogThread(fro: Frog, snakes: List<Snake>, OccupiedFields: List<Point>, rows: int, columns: int, Barrier: CyclicBarrier)
+    + run(): void
+}
+
+}
+
+Runnable <|.. FrogThread
+
+package "application.FruitPack" {
+
+class FruitThread {
+    ~ ROWS: int
+    ~ COLUMNS: int
+    - fruit: Fruit
+    - Snakes: List<Snake>
+    - Foods: List<Fruit>
+    - Walls: List<Wall>
+    - Frogs: List<Frog>
+
+    + FruitThread(fru: Fruit, snakes: List<Snake>, foods: List<Fruit>, walls: List<Wall>, frogs: List<Frog>, rows: int, columns: int)
+    + run(): void
+}
+
+}
+
+Runnable <|.. FruitThread
+
+package "application.SnakePack" {
+
+class PlayerSnakeThread {
+    ~ barrier: CyclicBarrier
+    - snake: Snake
+    - Direction: int
+
+    + PlayerSnakeThread(Snake: Snake, Dir: int, Barrier: CyclicBarrier)
+    + run(): void
+}
+
+class ComSnakeThread {
+    ~ barrier: CyclicBarrier
+    - snake: Snake
+    - Snakes: List<Snake>
+    - Foods: List<Fruit>
+    - Frogs: List<Frog>
+    - Walls: List<Wall>
+    - GameSize: int
+
+    + ComSnakeThread(Snake: Snake, snakes: List<Snake>, foods: List<Fruit>, frogs: List<Frog>, walls: List<Wall>, gamesize: int, Barrier: CyclicBarrier)
+    + run(): void
+}
+
+}
+
+Runnable <|.. PlayerSnakeThread
+
+Runnable <|.. ComSnakeThread
+
+}
+
+@enduml
