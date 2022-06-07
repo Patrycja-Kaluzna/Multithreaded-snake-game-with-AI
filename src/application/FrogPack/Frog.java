@@ -99,7 +99,7 @@ public class Frog implements Frog_Interface {
         this.coordinates = (Point) Coordinates.clone();
         this.Direction = direction;
     }
-
+//
     /**
      * Generuje zabe biorac pod uwage polozenia wezy,
      * owocow, scian i innych zab na planszy.
